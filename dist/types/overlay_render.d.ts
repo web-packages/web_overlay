@@ -12,6 +12,6 @@ export declare abstract class OverlayRender {
     measureSize(target: HTMLElement): OverlayRenderResult;
     reflow(target: HTMLElement): void;
 }
-export declare class OverlayRenderWithAlignCenter extends OverlayRender {
+export declare class OverlayRenderWithAutoCenter extends OverlayRender {
     performLayout(element: HTMLElement, target: HTMLElement, parent: HTMLElement): OverlayRenderResult;
 }

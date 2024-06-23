@@ -1,10 +1,11 @@
 import { OverlayElement } from "./components/overlay_element";
+import { AutoCenterOverlayRender } from "./overlay_render";
 
 export const OverlayAlignment = {
     AUTO: "auto",
     AUTO_LEFT: "auto_left",
     AUTO_RIGHT: "auto_right",
-    AUTO_CENTER: "auto_center"
+    AUTO_CENTER: new AutoCenterOverlayRender()
 }
 
 export class Overlay {
@@ -22,6 +23,7 @@ export class Overlay {
 
         const wrapper = document.createElement("overlay-wrapper") as OverlayElement;
         wrapper.append(element);
+        wrapper.render = new AutoCenterOverlayRender();
         
         this.overlays.set(element, wrapper);
 

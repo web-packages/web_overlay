@@ -46,7 +46,7 @@ export abstract class OverlayRender {
     }
 }
 
-export class OverlayRenderWithAlignCenter extends OverlayRender {
+export class AutoCenterOverlayRender extends OverlayRender {
     performLayout(
         element: HTMLElement,
         target: HTMLElement,

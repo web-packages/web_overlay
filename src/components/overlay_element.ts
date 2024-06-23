@@ -1,7 +1,12 @@
-import { OverlayRender, OverlayRenderWithAlignCenter } from "../overlay_render";
+import { OverlayRender } from "../overlay_render";
 
 export class OverlayElement extends HTMLElement {
-    private render: OverlayRender = new OverlayRenderWithAlignCenter();
+    render: OverlayRender;
+
+    unsetLayout() {
+        this.style.width = "fit-content";
+        this.style.height = "fit-content";
+    }
 
     connectedCallback() {
         this.style.display = "block";

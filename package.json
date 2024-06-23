@@ -1,0 +1,32 @@
+{
+  "name": "web_overlay",
+  "version": "1.0.0",
+  "description": "This package provides the foundation to implement overlay elements that take overflow-considered.",
+  "repository": "https://github.com/MTtankkeo/web_overlay",
+  "bugs": "https://github.com/MTtankkeo/web_overlay/issues",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.esm.js",
+  "types": "./dist/types/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -c -w"
+  },
+  "keywords": [
+    "web",
+    "frontend",
+    "client-side",
+    "overlay",
+    "layout",
+    "foundation"
+  ],
+  "author": "Dev Ttangkong",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^4.18.0",
+    "rollup-plugin-typescript2": "^0.36.0",
+    "terser": "^5.31.1",
+    "typescript": "^5.5.2"
+  }
+}

@@ -1,14 +1,11 @@
 import { OverlayElement } from "./components/overlay_element";
+import { OverlayAlignmentBehvaior } from "./overlay";
 
 export type OverlayRenderResult = {
     x: number,
     y: number,
     size: {width: number, height: number}
 };
-
-export type OverlayRenderOption = {
-    padding: string,
-}
 
 export abstract class OverlayRender {
     /**
@@ -23,29 +20,41 @@ export abstract class OverlayRender {
     }
 }
 
-export class AutoCenterOverlayRender extends OverlayRender {
+export class BottomOverlayRender extends OverlayRender {
     performLayout(element: OverlayElement): OverlayRenderResult {
         const overlay  = element.getBoundingClientRect();
         const target   = element.target.getBoundingClientRect();
         const viewport = element.parent.getBoundingClientRect();
-        const padding  = element.option?.padding ?? "15px";
+        const alignment = element.behavior.alignment;
+        const xa = alignment?.x ?? OverlayAlignmentBehvaior.ALL;
+        const xy = alignment?.y ?? OverlayAlignmentBehvaior.ALL;
 
-        // Calculate overflow based on viewport dimensions (assuming no scrolling)
+        // The centered position relative to target.
+        const centeredX = target.x + (target.width - overlay.width) / 2;
+        const centeredY = target.y + target.height;
+
+        // The distance about how far from the left of window.
+        const right = window.innerWidth - (centeredX + overlay.width);
+
+        // The overflow based on viewport dimensions. (assuming exists scrolling)
         const overflowed = {
-            x: Math.max(overlay.x - viewport.x, 0),
-            y: Math.max(overlay.y - viewport.y, 0),
+            left: Math.max(-1 * centeredX + viewport.left, 0),
+            right: 0,
+            bottom: Math.max(centeredY + overlay.height - viewport.bottom, 0),
         };
 
-        const overlayRight = target.x + overlay.width;
-        const x = target.x + (target.right - overlayRight) / 2;
-        const y = target.y + target.height;
+        console.log(right);
 
-        console.log(overflowed);
+        const x = centeredX + overflowed.left;
+        const y = centeredY - overflowed.bottom;
 
         return {
-            x: x,
-            y: y,
-            size: {width: overlay.width, height: overlay.height}
+            x: Math.max(x, 0),
+            y: Math.max(y, 0),
+            size: {
+                width: Math.min(overlay.width, viewport.width),
+                height: Math.min(overlay.height, overlay.bottom + y),
+            }
         }
     }
 }

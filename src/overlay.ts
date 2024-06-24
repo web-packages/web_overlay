@@ -1,11 +1,23 @@
 import { OverlayElement } from "./components/overlay_element";
-import { AutoCenterOverlayRender } from "./overlay_render";
+import { BottomOverlayRender, OverlayRender } from "./overlay_render";
 
 export const OverlayAlignment = {
-    AUTO: "auto",
-    AUTO_LEFT: "auto_left",
-    AUTO_RIGHT: "auto_right",
-    AUTO_CENTER: new AutoCenterOverlayRender()
+    BOTTOM: new BottomOverlayRender(),
+}
+
+export enum OverlayAlignmentBehvaior {
+    NONE = "none",
+    ALL = "all",
+    SIZE = "size",
+    POSITION = "position",
+}
+
+export interface OverlayBehavior {
+    render: OverlayRender,
+    alignment?: {
+        x: OverlayAlignmentBehvaior,
+        y: OverlayAlignmentBehvaior,
+    }
 }
 
 export class Overlay {
@@ -15,7 +27,7 @@ export class Overlay {
         element: HTMLElement,
         target: HTMLElement,
         parent: HTMLElement = document.body,
-        alignment = OverlayAlignment.AUTO
+        behavior: OverlayBehavior = { render: OverlayAlignment.BOTTOM }
     ) {
         if (element == null) throw new Error("todo");
         if (target == null) throw new Error("todo");
@@ -25,7 +37,7 @@ export class Overlay {
         wrapper.append(element);
         wrapper.target = target;
         wrapper.parent = parent;
-        wrapper.render = new AutoCenterOverlayRender();
+        wrapper.behavior = behavior;
         
         this.overlays.set(element, wrapper);
         parent.append(wrapper);

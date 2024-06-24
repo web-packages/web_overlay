@@ -1,9 +1,8 @@
-import { OverlayRender, OverlayRenderOption } from "../overlay_render";
+import { OverlayBehavior } from "../overlay";
 export declare class OverlayElement extends HTMLElement {
     target: HTMLElement;
     parent: HTMLElement;
-    render: OverlayRender;
-    option: OverlayRenderOption;
+    behavior: OverlayBehavior;
     observer: MutationObserver;
     unsetLayout(): void;
     disconnectedCallback(): void;

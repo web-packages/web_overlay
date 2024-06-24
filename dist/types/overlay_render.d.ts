@@ -7,13 +7,10 @@ export type OverlayRenderResult = {
         height: number;
     };
 };
-export type OverlayRenderOption = {
-    padding: string;
-};
 export declare abstract class OverlayRender {
     abstract performLayout(element: OverlayElement): OverlayRenderResult;
     reflow(target: HTMLElement): void;
 }
-export declare class AutoCenterOverlayRender extends OverlayRender {
+export declare class BottomOverlayRender extends OverlayRender {
     performLayout(element: OverlayElement): OverlayRenderResult;
 }

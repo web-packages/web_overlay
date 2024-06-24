@@ -1,15 +1,14 @@
-import { OverlayRender, OverlayRenderOption } from "../overlay_render";
+import { OverlayBehavior } from "../overlay";
 
 export class OverlayElement extends HTMLElement {
     target: HTMLElement;
     parent: HTMLElement;
-    render: OverlayRender;
-    option: OverlayRenderOption;
+    behavior: OverlayBehavior;
     observer: MutationObserver;
 
     unsetLayout() {
-        this.style.width = "fit-content";
-        this.style.height = "fit-content";
+        this.style.width = "max-content";
+        this.style.height = "max-content";
         this.style.left = "0px";
         this.style.top = "0px";
         this.getBoundingClientRect(); // reflowed
@@ -24,8 +23,10 @@ export class OverlayElement extends HTMLElement {
         this.style.position = "fixed";
         this.style.left = "0px";
         this.style.top = "0px";
-        this.style.width = "fit-content";
-        this.style.height = "fit-content";
+        this.style.width = "max-content";
+        this.style.height = "max-content";
+
+        // (this.firstElementChild as HTMLElement).style.minWidth = "max-content";
 
         // Calculate size and position initially and perform layout.
         this.performLayout();
@@ -50,14 +51,12 @@ export class OverlayElement extends HTMLElement {
     }
 
     performLayout() {
-        const result = this.render.performLayout(this);
+        const result = this.behavior.render.performLayout(this);
         
         this.style.width = `${result.size.width}px`;
         this.style.height = `${result.size.height}px`;
         this.style.left = `${result.x}px`;
         this.style.top = `${result.y}px`;
-        
-        console.log(result);
     }
 }
 

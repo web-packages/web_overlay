@@ -53,7 +53,7 @@ export class FlexibleOverlayConstraint extends OverlayConstraint {
             left: Math.max(viewport.left - rect.x, 0),
             right: Math.max(viewportRight - overlayRight, 0),
             top: 0,
-            bottom: Math.max(rect.x + rect.height - viewport.bottom, 0),
+            bottom: Math.max(rect.y + rect.height - viewport.bottom, 0),
         };
     }
 }

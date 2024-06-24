@@ -33,17 +33,20 @@ export class BottomOverlayRender extends OverlayRender {
         const centeredX = target.x + (target.width - overlay.width) / 2;
         const centeredY = target.y + target.height;
 
-        // The distance about how far from the left of window.
-        const right = window.innerWidth - (centeredX + overlay.width);
+        // The distance about how far from the window left of overlay element.
+        const overlayRight = window.innerWidth - (centeredX + overlay.width);
+
+        // The distance about how far from the window left of viewport element.
+        const viewportRight = window.innerWidth - (viewport.right);
 
         // The overflow based on viewport dimensions. (assuming exists scrolling)
         const overflowed = {
-            left: Math.max(-1 * centeredX + viewport.left, 0),
-            right: 0,
+            left: Math.max(viewport.left - centeredX, 0),
+            right: Math.max(viewportRight - overlayRight, 0),
             bottom: Math.max(centeredY + overlay.height - viewport.bottom, 0),
         };
 
-        console.log(right);
+        console.log(overflowed);
 
         const x = centeredX + overflowed.left;
         const y = centeredY - overflowed.bottom;

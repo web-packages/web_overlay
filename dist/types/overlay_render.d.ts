@@ -12,11 +12,19 @@ export type OverlayRenderResult = {
 export declare abstract class OverlayRender<T extends OverlayConstraint> {
     abstract performLayout(element: OverlayElement): OverlayRenderResult;
     abstract createOverlayConstraint(viewport: DOMRect, alignment: OverlayAlignment): T;
-    reflow(child: DOMRect, parent: Partial<DOMRect>): DOMRect;
+    reflow(target: HTMLElement, result: Partial<OverlayRenderResult>): DOMRect;
+    mergeRect(child: DOMRect, parent: Partial<DOMRect>): DOMRect;
 }
 export declare abstract class FlexibleOverlayRender extends OverlayRender<FlexibleOverlayConstraint> {
     createOverlayConstraint(viewport: DOMRect, alignment: OverlayAlignment): FlexibleOverlayConstraint;
 }
 export declare class BottomOverlayRender extends FlexibleOverlayRender {
-    performLayout(element: OverlayElement): OverlayRenderResult;
+    performLayout(element: OverlayElement): {
+        x: number;
+        y: number;
+        size: {
+            width: number;
+            height: number;
+        };
+    };
 }

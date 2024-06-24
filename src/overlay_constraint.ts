@@ -36,8 +36,6 @@ export class FlexibleOverlayConstraint extends OverlayConstraint {
         // The distance about how far from the window left of viewport element.
         const viewportRight = window.innerWidth - (this.viewport.right);
 
-        console.log(viewport.top - rect.y);
-
         // The overflow based on viewport dimensions. (assuming exists scrolling)
         return {
             left: Math.max(viewport.left - rect.x, 0),

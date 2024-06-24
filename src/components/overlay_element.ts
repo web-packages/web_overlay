@@ -6,6 +6,11 @@ export class OverlayElement extends HTMLElement {
     behavior: OverlayBehavior;
     observer: MutationObserver;
 
+    markNeedRepaint() {
+        this.unsetLayout();
+        this.performLayout();
+    }
+
     unsetLayout() {
         this.style.width = "max-content";
         this.style.height = "max-content";
@@ -16,6 +21,8 @@ export class OverlayElement extends HTMLElement {
 
     disconnectedCallback() {
         this.observer.disconnect();
+        window.removeEventListener("resize", this.markNeedRepaint.bind(this));
+        window.removeEventListener("scroll", this.markNeedRepaint.bind(this));
     }
 
     connectedCallback() {
@@ -26,16 +33,11 @@ export class OverlayElement extends HTMLElement {
         this.style.width = "max-content";
         this.style.height = "max-content";
 
-        // (this.firstElementChild as HTMLElement).style.minWidth = "max-content";
-
         // Calculate size and position initially and perform layout.
         this.performLayout();
-        
+
         // Called when this element is reflowed.
-        this.observer = new MutationObserver(() => {
-            this.unsetLayout();
-            this.performLayout();
-        });
+        this.observer = new MutationObserver(this.markNeedRepaint.bind(this));
 
         this.observer.observe(this.firstElementChild, {
             attributes: true,
@@ -44,10 +46,8 @@ export class OverlayElement extends HTMLElement {
             childList: true,
         });
 
-        window.addEventListener("resize", () => {
-            this.unsetLayout();
-            this.performLayout();
-        })
+        window.addEventListener("resize", this.markNeedRepaint.bind(this));
+        window.addEventListener("scroll", this.markNeedRepaint.bind(this));
     }
 
     performLayout() {

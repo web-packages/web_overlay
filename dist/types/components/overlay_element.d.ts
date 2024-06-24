@@ -4,6 +4,7 @@ export declare class OverlayElement extends HTMLElement {
     parent: HTMLElement;
     behavior: OverlayBehavior;
     observer: MutationObserver;
+    markNeedRepaint(): void;
     unsetLayout(): void;
     disconnectedCallback(): void;
     connectedCallback(): void;

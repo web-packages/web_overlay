@@ -12,34 +12,22 @@ export type OverlayConstraintOverflowed = {
     bottom: number
 }
 
-export interface OverlayConstraintResult {
-    size: OverlayConstraintSized,
-    overflowed: OverlayConstraintOverflowed
-}
-
 export abstract class OverlayConstraint {
     constructor(
         public viewport: DOMRect,
         public alignment: OverlayAlignment
     ) {}
 
-    measure(rect: DOMRect): OverlayConstraintResult {
-        return {
-            size: this.measureSized(rect),
-            overflowed: this.measureOverflowed(rect)
-        }
-    }
-
-    abstract measureSized(rect: DOMRect): OverlayConstraintSized;
-    abstract measureOverflowed(rect: DOMRect): OverlayConstraintOverflowed;
+    abstract getSized(rect: DOMRect): OverlayConstraintSized;
+    abstract getOverflowed(rect: DOMRect): OverlayConstraintOverflowed;
 }
 
 export class FlexibleOverlayConstraint extends OverlayConstraint {
-    measureSized(rect: DOMRect): OverlayConstraintSized {
+    getSized(rect: DOMRect): OverlayConstraintSized {
         throw new Error("Method not implemented.")
     }
 
-    measureOverflowed(rect: DOMRect): OverlayConstraintOverflowed {
+    getOverflowed(rect: DOMRect): OverlayConstraintOverflowed {
         const viewport = this.viewport;
 
         // The distance about how far from the window left of overlay element.
@@ -48,11 +36,13 @@ export class FlexibleOverlayConstraint extends OverlayConstraint {
         // The distance about how far from the window left of viewport element.
         const viewportRight = window.innerWidth - (this.viewport.right);
 
+        console.log(viewport.top - rect.y);
+
         // The overflow based on viewport dimensions. (assuming exists scrolling)
         return {
             left: Math.max(viewport.left - rect.x, 0),
             right: Math.max(viewportRight - overlayRight, 0),
-            top: 0,
+            top: Math.max(viewport.top - rect.y, 0),
             bottom: Math.max(rect.y + rect.height - viewport.bottom, 0),
         };
     }

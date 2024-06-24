@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+
+    <script type="module" src="index.js" defer></script>
+</head>
+<body>
+    <style>
+        html { display: flex; width: 100%; height: 100%; overflow: hidden; }
+        body { display: flex; width: 100%; height: 100%; margin: 0px; }
+
+        .target-wrapper {
+            display: flex;
+            width: calc(100% - 60px);
+            height: calc(100% - 60px);
+            margin: 30px;
+            justify-content: center;
+        }
+
+        #target {
+            display: flex;
+            width: max-content;
+            height: max-content;
+            margin-top: 200px;
+        }
+    </style>
+    <div class="target-wrapper">
+        <div id="target">Overlay Target</div>
+    </div>
+</body>
+</html>

@@ -54,12 +54,12 @@ export class BottomOverlayRender extends FlexibleOverlayRender {
 
         // The centered position relative to target.
         const centeredX = target.x + (target.width - overlay.width) / 2;
-        const centeredY = target.y + target.height;
+        const centeredY = target.y - overlay.height;
 
         overlay = this.reflow(overlay, {x: centeredX, y: centeredY});
 
         const constraint = this.createOverlayConstraint(viewport, OverlayAlignment.ALL);
-        const overflowed = constraint.measureOverflowed(overlay);
+        const overflowed = constraint.getOverflowed(overlay);
 
         console.log(overflowed);
 

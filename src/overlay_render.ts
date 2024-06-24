@@ -1,3 +1,4 @@
+import { OverlayElement } from "./components/overlay_element";
 
 export type OverlayRenderResult = {
     x: number,
@@ -5,40 +6,16 @@ export type OverlayRenderResult = {
     size: {width: number, height: number}
 };
 
-export abstract class OverlayRender {
-    private static get tolerance(): number {
-        return 0.3;
-    }
+export type OverlayRenderOption = {
+    padding: string,
+}
 
+export abstract class OverlayRender {
     /**
      * Calculates the static position and size where the overlay element
      * will be located and returns it.
      */
-    abstract performLayout(
-        element: HTMLElement,
-        target: HTMLElement,
-        parent: HTMLElement
-    ): OverlayRenderResult;
-
-    /**
-     * Returns a unique size of the given element by calculating
-     * for a scale degree.
-     */
-    measureSize(target: HTMLElement): OverlayRenderResult {
-        const painted = target.getBoundingClientRect();
-        const scaleX = target.clientWidth / painted.width;
-        const scaleY = target.clientHeight / painted.height;
-        const tolerance = OverlayRender.tolerance;
-
-        return {
-            x: painted.x,
-            y: painted.y,
-            size: {
-                width: painted.width * scaleX + tolerance,
-                height: painted.height * scaleY + tolerance,
-            }
-        };
-    }
+    abstract performLayout(element: OverlayElement): OverlayRenderResult;
 
     /** Call this function to trigger a reflow of the given element. */
     reflow(target: HTMLElement) {
@@ -47,25 +24,28 @@ export abstract class OverlayRender {
 }
 
 export class AutoCenterOverlayRender extends OverlayRender {
-    performLayout(
-        element: HTMLElement,
-        target: HTMLElement,
-        parent: HTMLElement
-    ): OverlayRenderResult {
-        const overlay = this.measureSize(element);
-        const viewport = this.measureSize(parent);
-        const targetLayout = this.measureSize(target);
+    performLayout(element: OverlayElement): OverlayRenderResult {
+        const overlay  = element.getBoundingClientRect();
+        const target   = element.target.getBoundingClientRect();
+        const viewport = element.parent.getBoundingClientRect();
+        const padding  = element.option?.padding ?? "15px";
 
         // Calculate overflow based on viewport dimensions (assuming no scrolling)
         const overflowed = {
-            x: Math.max(overlay.size.width - viewport.size.width, 0),
-            y: Math.max(overlay.size.height - viewport.size.height, 0),
+            x: Math.max(overlay.x - viewport.x, 0),
+            y: Math.max(overlay.y - viewport.y, 0),
         };
 
+        const overlayRight = target.x + overlay.width;
+        const x = target.x + (target.right - overlayRight) / 2;
+        const y = target.y + target.height;
+
+        console.log(overflowed);
+
         return {
-            x: overflowed.x,
-            y: overflowed.y,
-            size: overlay.size
+            x: x,
+            y: y,
+            size: {width: overlay.width, height: overlay.height}
         }
     }
 }

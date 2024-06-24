@@ -23,10 +23,11 @@ export class Overlay {
 
         const wrapper = document.createElement("overlay-wrapper") as OverlayElement;
         wrapper.append(element);
+        wrapper.target = target;
+        wrapper.parent = parent;
         wrapper.render = new AutoCenterOverlayRender();
         
         this.overlays.set(element, wrapper);
-
         parent.append(wrapper);
 
         return wrapper;

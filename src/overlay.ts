@@ -1,11 +1,11 @@
 import { OverlayElement } from "./components/overlay_element";
 import { BottomOverlayRender, OverlayRender } from "./overlay_render";
 
-export const OverlayAlignment = {
+export const OverlayRenders = {
     BOTTOM: new BottomOverlayRender(),
 }
 
-export enum OverlayAlignmentBehvaior {
+export enum OverlayAlignment {
     NONE = "none",
     ALL = "all",
     SIZE = "size",
@@ -13,10 +13,10 @@ export enum OverlayAlignmentBehvaior {
 }
 
 export interface OverlayBehavior {
-    render: OverlayRender,
+    render: OverlayRender<any>,
     alignment?: {
-        x: OverlayAlignmentBehvaior,
-        y: OverlayAlignmentBehvaior,
+        x: OverlayAlignment,
+        y: OverlayAlignment,
     }
 }
 
@@ -27,7 +27,7 @@ export class Overlay {
         element: HTMLElement,
         target: HTMLElement,
         parent: HTMLElement = document.body,
-        behavior: OverlayBehavior = { render: OverlayAlignment.BOTTOM }
+        behavior: OverlayBehavior = { render: OverlayRenders.BOTTOM }
     ) {
         if (element == null) throw new Error("todo");
         if (target == null) throw new Error("todo");

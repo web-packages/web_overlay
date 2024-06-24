@@ -1,19 +1,19 @@
 import { OverlayElement } from "./components/overlay_element";
 import { BottomOverlayRender, OverlayRender } from "./overlay_render";
-export declare const OverlayAlignment: {
+export declare const OverlayRenders: {
     BOTTOM: BottomOverlayRender;
 };
-export declare enum OverlayAlignmentBehvaior {
+export declare enum OverlayAlignment {
     NONE = "none",
     ALL = "all",
     SIZE = "size",
     POSITION = "position"
 }
 export interface OverlayBehavior {
-    render: OverlayRender;
+    render: OverlayRender<any>;
     alignment?: {
-        x: OverlayAlignmentBehvaior;
-        y: OverlayAlignmentBehvaior;
+        x: OverlayAlignment;
+        y: OverlayAlignment;
     };
 }
 export declare class Overlay {

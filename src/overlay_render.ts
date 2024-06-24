@@ -1,5 +1,6 @@
 import { OverlayElement } from "./components/overlay_element";
-import { OverlayAlignmentBehvaior } from "./overlay";
+import { OverlayAlignment } from "./overlay";
+import { FlexibleOverlayConstraint, OverlayConstraint, OverlayConstraintOverflowed, OverlayConstraintSized } from "./overlay_constraint";
 
 export type OverlayRenderResult = {
     x: number,
@@ -7,44 +8,58 @@ export type OverlayRenderResult = {
     size: {width: number, height: number}
 };
 
-export abstract class OverlayRender {
+export abstract class OverlayRender<T extends OverlayConstraint> {
     /**
      * Calculates the static position and size where the overlay element
      * will be located and returns it.
      */
     abstract performLayout(element: OverlayElement): OverlayRenderResult;
 
+    /** Returns the overlay constraint instance that is created. */
+    abstract createOverlayConstraint(
+        viewport: DOMRect,
+        alignment: OverlayAlignment
+    ): T;
+
     /** Call this function to trigger a reflow of the given element. */
-    reflow(target: HTMLElement) {
-        target.getBoundingClientRect();
+    reflow(child: DOMRect, parent: Partial<DOMRect>): DOMRect {
+        return new DOMRect(
+            parent.x ?? child.x,
+            parent.y ?? child.y,
+            parent.width ?? child.width,
+            parent.height ?? child.height
+        )
     }
 }
 
-export class BottomOverlayRender extends OverlayRender {
+export abstract class FlexibleOverlayRender extends OverlayRender<FlexibleOverlayConstraint> {
+    createOverlayConstraint(
+        viewport: DOMRect,
+        alignment: OverlayAlignment
+    ): FlexibleOverlayConstraint {
+        return new FlexibleOverlayConstraint(viewport, alignment);
+    }
+}
+
+export class BottomOverlayRender extends FlexibleOverlayRender {
+    
     performLayout(element: OverlayElement): OverlayRenderResult {
-        const overlay  = element.getBoundingClientRect();
         const target   = element.target.getBoundingClientRect();
         const viewport = element.parent.getBoundingClientRect();
         const alignment = element.behavior.alignment;
-        const xa = alignment?.x ?? OverlayAlignmentBehvaior.ALL;
-        const xy = alignment?.y ?? OverlayAlignmentBehvaior.ALL;
+        const xa = alignment?.x ?? OverlayAlignment.ALL;
+        const xy = alignment?.y ?? OverlayAlignment.ALL;
+
+        let overlay = element.getBoundingClientRect();
 
         // The centered position relative to target.
         const centeredX = target.x + (target.width - overlay.width) / 2;
         const centeredY = target.y + target.height;
 
-        // The distance about how far from the window left of overlay element.
-        const overlayRight = window.innerWidth - (centeredX + overlay.width);
+        overlay = this.reflow(overlay, {x: centeredX, y: centeredY});
 
-        // The distance about how far from the window left of viewport element.
-        const viewportRight = window.innerWidth - (viewport.right);
-
-        // The overflow based on viewport dimensions. (assuming exists scrolling)
-        const overflowed = {
-            left: Math.max(viewport.left - centeredX, 0),
-            right: Math.max(viewportRight - overlayRight, 0),
-            bottom: Math.max(centeredY + overlay.height - viewport.bottom, 0),
-        };
+        const constraint = this.createOverlayConstraint(viewport, OverlayAlignment.ALL);
+        const overflowed = constraint.measureOverflowed(overlay);
 
         console.log(overflowed);
 

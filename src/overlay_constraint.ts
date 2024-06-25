@@ -16,7 +16,7 @@ export abstract class OverlayConstraint {
     abstract getOverflowed(rect: DOMRect): OverlayConstraintOverflowed;
 }
 
-export class FlexibleOverlayConstraint extends OverlayConstraint {
+export class DrivenOverlayConstraint extends OverlayConstraint {
     getOverflowed(rect: DOMRect): OverlayConstraintOverflowed {
         const viewport = this.viewport;
 

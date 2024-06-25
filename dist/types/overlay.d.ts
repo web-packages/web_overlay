@@ -1,4 +1,5 @@
 import { OverlayElement } from "./components/overlay_element";
+import { OverlayConstraint } from "./overlay_constraint";
 import { BottomOverlayRender, OverlayRender } from "./overlay_render";
 export declare const OverlayRenders: {
     BOTTOM: BottomOverlayRender;
@@ -9,8 +10,8 @@ export declare enum OverlayAlignment {
     SIZE = "size",
     POSITION = "position"
 }
-export interface OverlayBehavior {
-    render: OverlayRender<any>;
+export interface OverlayBehavior<T extends OverlayConstraint = any> {
+    render: OverlayRender<T>;
     alignment?: {
         x: OverlayAlignment;
         y: OverlayAlignment;

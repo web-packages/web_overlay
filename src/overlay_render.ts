@@ -1,7 +1,7 @@
 import { OverlayElement } from "./components/overlay_element";
-import { OverlayAlignment } from "./overlay";
-import { FlexibleOverlayConstraint, OverlayConstraint } from "./overlay_constraint";
-import { OverlayRenderAdjuster } from "./overlay_render_adjuster";
+import { OverlayAlignment, OverlayBehavior } from "./overlay";
+import { DrivenOverlayConstraint, OverlayConstraint } from "./overlay_constraint";
+import { DrivenOverlayRenderAdjuster, OverlayRenderAdjuster } from "./overlay_render_adjuster";
 import { DOMRectUtil } from "./utils/dom_rect";
 
 export type OverlayRenderResult = {
@@ -23,6 +23,12 @@ export abstract class OverlayRender<T extends OverlayConstraint> {
         alignment: OverlayAlignment
     ): T;
 
+    /** Returns the overlay render adjuster instance that is created. */
+    abstract createOverlayRenderAdjuster(
+        element: OverlayElement,
+        behavior: OverlayBehavior
+    ): OverlayRenderAdjuster<T>;
+
     reflow(target: HTMLElement, result: Partial<DOMRect>): DOMRect {
         if (result?.width != null) {
             target.style.width = `${result.width}px`;
@@ -41,23 +47,27 @@ export abstract class OverlayRender<T extends OverlayConstraint> {
     }
 }
 
-export abstract class FlexibleOverlayRender extends OverlayRender<FlexibleOverlayConstraint> {
+export abstract class DrivenOverlayRender extends OverlayRender<DrivenOverlayConstraint> {
     createOverlayConstraint(
         viewport: DOMRect,
         alignment: OverlayAlignment
-    ): FlexibleOverlayConstraint {
-        return new FlexibleOverlayConstraint(viewport, alignment);
+    ): DrivenOverlayConstraint {
+        return new DrivenOverlayConstraint(viewport, alignment);
+    }
+
+    createOverlayRenderAdjuster(
+        element: OverlayElement,
+        behavior: OverlayBehavior
+    ): DrivenOverlayRenderAdjuster {
+        return new DrivenOverlayRenderAdjuster(element, behavior);
     }
 }
 
-export class BottomOverlayRender extends FlexibleOverlayRender {
-    
+export class BottomOverlayRender extends DrivenOverlayRender {
     performLayout(element: OverlayElement) {
         const target = element.target.getBoundingClientRect();
         const viewport = element.parent.getBoundingClientRect();
-        const alignment = element.behavior.alignment;
-        const xa = alignment?.x ?? OverlayAlignment.ALL;
-        const xy = alignment?.y ?? OverlayAlignment.ALL;
+        const behavior = element.behavior;
 
         let overlay = element.getBoundingClientRect();
 
@@ -68,10 +78,9 @@ export class BottomOverlayRender extends FlexibleOverlayRender {
         overlay = DOMRectUtil.merge(overlay, {x: centeredX, y: centeredY});
 
         const constraint = this.createOverlayConstraint(viewport, OverlayAlignment.ALL);
-        const adjuster = new OverlayRenderAdjuster(element, xa);
+        const adjuster = this.createOverlayRenderAdjuster(element, behavior);
         
         overlay = adjuster.performLayout(overlay, constraint);
-        overlay = this.reflow(element, overlay);
         
         return {
             x: overlay.x,

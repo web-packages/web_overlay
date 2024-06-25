@@ -11,6 +11,6 @@ export declare abstract class OverlayConstraint {
     constructor(viewport: DOMRect, alignment: OverlayAlignment);
     abstract getOverflowed(rect: DOMRect): OverlayConstraintOverflowed;
 }
-export declare class FlexibleOverlayConstraint extends OverlayConstraint {
+export declare class DrivenOverlayConstraint extends OverlayConstraint {
     getOverflowed(rect: DOMRect): OverlayConstraintOverflowed;
 }

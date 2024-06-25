@@ -12,8 +12,7 @@ export type OverlayRenderResult = {
 export declare abstract class OverlayRender<T extends OverlayConstraint> {
     abstract performLayout(element: OverlayElement): OverlayRenderResult;
     abstract createOverlayConstraint(viewport: DOMRect, alignment: OverlayAlignment): T;
-    reflow(target: HTMLElement, result: Partial<OverlayRenderResult>): DOMRect;
-    mergeRect(child: DOMRect, parent: Partial<DOMRect>): DOMRect;
+    reflow(target: HTMLElement, result: Partial<DOMRect>): DOMRect;
 }
 export declare abstract class FlexibleOverlayRender extends OverlayRender<FlexibleOverlayConstraint> {
     createOverlayConstraint(viewport: DOMRect, alignment: OverlayAlignment): FlexibleOverlayConstraint;

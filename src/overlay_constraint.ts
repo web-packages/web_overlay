@@ -18,15 +18,10 @@ export abstract class OverlayConstraint {
         public alignment: OverlayAlignment
     ) {}
 
-    abstract getSized(rect: DOMRect): OverlayConstraintSized;
     abstract getOverflowed(rect: DOMRect): OverlayConstraintOverflowed;
 }
 
 export class FlexibleOverlayConstraint extends OverlayConstraint {
-    getSized(rect: DOMRect): OverlayConstraintSized {
-        throw new Error("Method not implemented.")
-    }
-
     getOverflowed(rect: DOMRect): OverlayConstraintOverflowed {
         const viewport = this.viewport;
 

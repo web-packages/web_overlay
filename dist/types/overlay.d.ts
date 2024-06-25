@@ -4,10 +4,9 @@ export declare const OverlayRenders: {
     BOTTOM: BottomOverlayRender;
 };
 export declare enum OverlayAlignment {
-    NONE = "none",
     ALL = "all",
-    SIZE = "size",
-    POSITION = "position"
+    VERTICAL = "vertical",
+    HORIZONTAL = "horizontal"
 }
 export interface OverlayBehavior {
     render: OverlayRender<any>;

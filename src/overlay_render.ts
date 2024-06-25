@@ -1,6 +1,8 @@
 import { OverlayElement } from "./components/overlay_element";
 import { OverlayAlignment } from "./overlay";
 import { FlexibleOverlayConstraint, OverlayConstraint, OverlayConstraintOverflowed, OverlayConstraintSized } from "./overlay_constraint";
+import { OverlayRenderAdjuster } from "./overlay_render_adjuster";
+import { DOMRectUtil } from "./utils/dom_rect";
 
 export type OverlayRenderResult = {
     x: number,
@@ -21,12 +23,12 @@ export abstract class OverlayRender<T extends OverlayConstraint> {
         alignment: OverlayAlignment
     ): T;
 
-    reflow(target: HTMLElement, result: Partial<OverlayRenderResult>): DOMRect {
-        if (result.size?.width != null) {
-            target.style.width = `${result.size.width}px`;
+    reflow(target: HTMLElement, result: Partial<DOMRect>): DOMRect {
+        if (result?.width != null) {
+            target.style.width = `${result.width}px`;
         }
-        if (result.size?.height != null) {
-            target.style.height = `${result.size.height}px`;
+        if (result?.height != null) {
+            target.style.height = `${result.height}px`;
         }
         if (result.x != null) {
             target.style.left = `${result.x}px`;
@@ -36,15 +38,6 @@ export abstract class OverlayRender<T extends OverlayConstraint> {
         }
 
         return target.getBoundingClientRect();
-    }
-
-    mergeRect(child: DOMRect, parent: Partial<DOMRect>): DOMRect {
-        return new DOMRect(
-            parent.x ?? child.x,
-            parent.y ?? child.y,
-            parent.width ?? child.width,
-            parent.height ?? child.height
-        )
     }
 }
 
@@ -72,22 +65,20 @@ export class BottomOverlayRender extends FlexibleOverlayRender {
         const centeredX = target.x + (target.width - overlay.width) / 2;
         const centeredY = target.bottom;
 
-        overlay = this.mergeRect(overlay, {x: centeredX, y: centeredY});
+        overlay = DOMRectUtil.merge(overlay, {x: centeredX, y: centeredY});
 
         const constraint = this.createOverlayConstraint(viewport, OverlayAlignment.ALL);
-        const overflowed = constraint.getOverflowed(overlay);
-
-        const x = centeredX + overflowed.left;
-        const y = centeredY - overflowed.bottom;
+        const adjuster = new OverlayRenderAdjuster(overlay, viewport, xa);
         
-        overlay = this.reflow(element, {x, y});
+        overlay = adjuster.performLayout(constraint);
+        overlay = this.reflow(element, overlay);
         
         return {
-            x: x,
-            y: y,
+            x: overlay.x,
+            y: overlay.y,
             size: {
-                width: Math.min(overlay.width, viewport.width),
-                height: Math.min(overlay.height, viewport.height)
+                width: overlay.width,
+                height: overlay.height
             }
         }
     }

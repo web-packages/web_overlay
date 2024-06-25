@@ -6,10 +6,9 @@ export const OverlayRenders = {
 }
 
 export enum OverlayAlignment {
-    NONE = "none",
     ALL = "all",
-    SIZE = "size",
-    POSITION = "position",
+    VERTICAL = "vertical",
+    HORIZONTAL = "horizontal"
 }
 
 export interface OverlayBehavior {

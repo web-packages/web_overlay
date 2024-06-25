@@ -8,4 +8,12 @@ export class DOMRectUtil {
             parent.height ?? child.height
         )
     }
+
+    static reflowHorizontal(target: HTMLElement, rect: DOMRect): DOMRect {
+        target.style.left = `${rect.left}px`;
+        target.style.top = `${rect.top}px`;
+        target.style.width = `${rect.width}px`;
+        target.style.height = null;
+        return target.getBoundingClientRect();
+    }
 }

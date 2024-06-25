@@ -1,9 +1,9 @@
 import { OverlayAlignment } from "./overlay";
 import { OverlayConstraint } from "./overlay_constraint";
 export declare class OverlayRenderAdjuster {
-    rect: DOMRect;
-    viewport: DOMRect;
+    element: HTMLElement;
     alignment: OverlayAlignment;
-    constructor(rect: DOMRect, viewport: DOMRect, alignment: OverlayAlignment);
-    performLayout(constraint: OverlayConstraint): DOMRect;
+    constructor(element: HTMLElement, alignment: OverlayAlignment);
+    performLayout(rect: DOMRect, constraint: OverlayConstraint): DOMRect;
+    performLayoutHorizontal(rect: DOMRect, constraint: OverlayConstraint): DOMRect;
 }

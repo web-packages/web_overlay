@@ -68,9 +68,9 @@ export class BottomOverlayRender extends FlexibleOverlayRender {
         overlay = DOMRectUtil.merge(overlay, {x: centeredX, y: centeredY});
 
         const constraint = this.createOverlayConstraint(viewport, OverlayAlignment.ALL);
-        const adjuster = new OverlayRenderAdjuster(overlay, viewport, xa);
+        const adjuster = new OverlayRenderAdjuster(element, xa);
         
-        overlay = adjuster.performLayout(constraint);
+        overlay = adjuster.performLayout(overlay, constraint);
         overlay = this.reflow(element, overlay);
         
         return {

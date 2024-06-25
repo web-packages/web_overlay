@@ -1,16 +1,16 @@
+import { OverlayElement } from "./components/overlay_element";
 import { OverlayBehavior } from "./overlay";
 import { DrivenOverlayConstraint, OverlayConstraint } from "./overlay_constraint";
+import { OverlayRect } from "./overlay_layout";
 import { DOMRectUtil } from "./utils/dom_rect";
 
-export abstract class OverlayRenderCorrector<T extends OverlayConstraint> {
-    constructor(
-        public element: HTMLElement,
-        public behavior: OverlayBehavior,
-    ) {}
+export abstract class OverlayLayoutCorrector<T extends OverlayConstraint> {
+    constructor(public element: OverlayElement) {}
 
     performLayout(rect: DOMRect, constraint: T): DOMRect {
         // Generally, height is calculated according to width,
-        // so the overflow degree in the horizontal direction is calculated and reflowed first.
+        // so the overflow degree in the horizontal direction
+        // is calculated and reflowed first.
         return this.performLayoutVertical(this.performLayoutHorizontal(rect, constraint), constraint);
     }
 
@@ -18,7 +18,7 @@ export abstract class OverlayRenderCorrector<T extends OverlayConstraint> {
     abstract performLayoutHorizontal(rect: DOMRect, constraint: T): DOMRect;
 }
 
-export class SizedOverlayRenderCorrector<T extends OverlayConstraint> extends OverlayRenderCorrector<T> {
+export class SizedOverlayLayoutCorrector<T extends OverlayConstraint> extends OverlayLayoutCorrector<T> {
     performLayoutVertical(rect: DOMRect, constraint: DrivenOverlayConstraint): DOMRect {
         return rect;
     }
@@ -28,7 +28,7 @@ export class SizedOverlayRenderCorrector<T extends OverlayConstraint> extends Ov
     }
 }
 
-export class PositionedOverlayRenderCorrector<T extends OverlayConstraint> extends OverlayRenderCorrector<T> {
+export class PositionedOverlayLayoutCorrector<T extends OverlayConstraint> extends OverlayLayoutCorrector<T> {
     performLayoutVertical(rect: DOMRect, constraint: T): DOMRect {
         return rect;
     }
@@ -38,7 +38,11 @@ export class PositionedOverlayRenderCorrector<T extends OverlayConstraint> exten
     }
 }
 
-export class DrivenOverlayRenderCorrector extends OverlayRenderCorrector<DrivenOverlayConstraint> {
+export class DrivenOverlayRenderCorrector extends OverlayLayoutCorrector<DrivenOverlayConstraint> {
+    constructor(element: OverlayElement, public behavior: OverlayBehavior) {
+        super(element);
+    }
+
     performLayoutHorizontal(rect: DOMRect, constraint: OverlayConstraint): DOMRect {
         let overflowed = constraint.getOverflowed(rect);
 

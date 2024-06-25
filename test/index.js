@@ -1,4 +1,4 @@
-import { Overlay } from "../dist/index.esm.js";
+import { Overlay, OverlayDirection } from "../dist/index.esm.js";
 
 const overlayTarget = document.getElementById("target");
 const overlay = document.createElement("div");
@@ -17,4 +17,11 @@ child.style.height = "max-content";
 child.textContent = "Overlay Content, Overlay Content, Overlay Content, Overlay Content, Overlay Content";
 
 overlay.append(child);
-Overlay.attach(overlay, overlayTarget, overlayTarget.parentElement);
+Overlay.attach(
+    overlay,
+    overlayTarget,
+    overlayTarget.parentElement,
+    {
+        layout: OverlayDirection.BOTTOM
+    }
+);

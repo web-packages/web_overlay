@@ -1,10 +1,21 @@
 import { OverlayBehavior } from "../overlay";
+import { OverlayLayoutResult } from "../overlay_layout";
+
+export type OverlayReflowBehindBuilder = (element: HTMLElement, reflowed: OverlayLayoutResult) => HTMLElement;
 
 export class OverlayElement extends HTMLElement {
     target: HTMLElement;
     parent: HTMLElement;
     behavior: OverlayBehavior;
     observer: MutationObserver;
+
+    /** The target element wrapped by this overlay wrapper. */
+    get raw() {
+        return this.firstElementChild as HTMLElement;
+    }
+
+    /** Called when after the layout calculation has finally been completed. */
+    reflowBehindBuilder: OverlayReflowBehindBuilder;
 
     markNeedRepaint() {
         this.unsetLayout();
@@ -51,12 +62,15 @@ export class OverlayElement extends HTMLElement {
     }
 
     performLayout() {
-        const result = this.behavior.render.performLayout(this);
-        
-        this.style.width = `${result.size.width}px`;
-        this.style.height = `${result.size.height}px`;
-        this.style.left = `${result.x}px`;
-        this.style.top = `${result.y}px`;
+        const result = this.behavior.layout.performLayout(this);
+        const target = result.correctedRect;
+
+        this.style.width = `${target.width}px`;
+        this.style.height = `${target.height}px`;
+        this.style.left = `${target.x}px`;
+        this.style.top = `${target.y}px`;
+
+        this.reflowBehindBuilder?.call(this.raw, result);
     }
 }
 

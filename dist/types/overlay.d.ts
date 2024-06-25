@@ -1,8 +1,11 @@
 import { OverlayElement } from "./components/overlay_element";
 import { OverlayConstraint } from "./overlay_constraint";
-import { BottomOverlayRender, OverlayRender } from "./overlay_render";
-export declare const OverlayRenders: {
-    BOTTOM: BottomOverlayRender;
+import { BottomOverlayLayout, LeftOverlayLayout, OverlayLayout, RightOverlayLayout, TopOverlayLayout } from "./overlay_layout";
+export declare const OverlayDirection: {
+    BOTTOM: BottomOverlayLayout;
+    TOP: TopOverlayLayout;
+    Left: LeftOverlayLayout;
+    Right: RightOverlayLayout;
 };
 export declare enum OverlayAlignment {
     ALL = "all",
@@ -11,7 +14,7 @@ export declare enum OverlayAlignment {
     POSITION = "position"
 }
 export interface OverlayBehavior<T extends OverlayConstraint = any> {
-    render: OverlayRender<T>;
+    layout: OverlayLayout<T>;
     alignment?: {
         x: OverlayAlignment;
         y: OverlayAlignment;

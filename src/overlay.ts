@@ -1,9 +1,12 @@
 import { OverlayElement } from "./components/overlay_element";
 import { OverlayConstraint } from "./overlay_constraint";
-import { BottomOverlayRender, OverlayRender } from "./overlay_render";
+import { BottomOverlayLayout, LeftOverlayLayout, OverlayLayout, RightOverlayLayout, TopOverlayLayout } from "./overlay_layout";
 
-export const OverlayRenders = {
-    BOTTOM: new BottomOverlayRender(),
+export const OverlayDirection = {
+    BOTTOM: new BottomOverlayLayout(),
+    TOP: new TopOverlayLayout(),
+    Left: new LeftOverlayLayout(),
+    Right: new RightOverlayLayout()
 }
 
 export enum OverlayAlignment {
@@ -14,7 +17,7 @@ export enum OverlayAlignment {
 }
 
 export interface OverlayBehavior<T extends OverlayConstraint = any> {
-    render: OverlayRender<T>,
+    layout: OverlayLayout<T>,
     alignment?: {
         x: OverlayAlignment,
         y: OverlayAlignment,
@@ -28,7 +31,7 @@ export class Overlay {
         element: HTMLElement,
         target: HTMLElement,
         parent: HTMLElement = document.body,
-        behavior: OverlayBehavior = { render: OverlayRenders.BOTTOM }
+        behavior: OverlayBehavior = { layout: OverlayDirection.BOTTOM }
     ) {
         if (element == null) throw new Error("todo");
         if (target == null) throw new Error("todo");
@@ -39,7 +42,7 @@ export class Overlay {
         wrapper.target = target;
         wrapper.parent = parent;
         wrapper.behavior = behavior;
-        
+
         this.overlays.set(element, wrapper);
         parent.append(wrapper);
 

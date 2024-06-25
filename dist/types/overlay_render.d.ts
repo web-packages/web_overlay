@@ -3,12 +3,8 @@ import { OverlayAlignment, OverlayBehavior } from "./overlay";
 import { DrivenOverlayConstraint, OverlayConstraint } from "./overlay_constraint";
 import { DrivenOverlayRenderCorrector, OverlayRenderCorrector } from "./overlay_render_corrector";
 export type OverlayRenderResult = {
-    x: number;
-    y: number;
-    size: {
-        width: number;
-        height: number;
-    };
+    initialRect: DOMRect;
+    correctedRect: DOMRect;
 };
 export declare abstract class OverlayRender<T extends OverlayConstraint> {
     abstract performLayout(element: OverlayElement): OverlayRenderResult;
@@ -21,12 +17,5 @@ export declare abstract class DrivenOverlayRender extends OverlayRender<DrivenOv
     createOverlayRenderCorrector(element: OverlayElement, behavior: OverlayBehavior): DrivenOverlayRenderCorrector;
 }
 export declare class BottomOverlayRender extends DrivenOverlayRender {
-    performLayout(element: OverlayElement): {
-        x: number;
-        y: number;
-        size: {
-            width: number;
-            height: number;
-        };
-    };
+    performLayout(element: OverlayElement): OverlayRenderResult;
 }

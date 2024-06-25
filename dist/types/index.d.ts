@@ -1,3 +1,3 @@
-export { Overlay, OverlayAlignment } from "./overlay";
-export { OverlayRender, OverlayRenderResult } from "./overlay_render";
+export { Overlay, OverlayAlignment, OverlayBehavior, OverlayDirection } from "./overlay";
+export { OverlayLayout, DrivenOverlayLayout, OverlayLayoutResult, BottomOverlayLayout } from "./overlay_layout";
 export { OverlayElement } from "./components/overlay_element";

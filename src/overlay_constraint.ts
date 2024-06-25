@@ -1,10 +1,5 @@
 import { OverlayAlignment } from "./overlay"
 
-export type OverlayConstraintSized = {
-    width: number,
-    height: number
-}
-
 export type OverlayConstraintOverflowed = {
     left: number,
     right: number,

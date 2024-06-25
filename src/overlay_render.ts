@@ -1,6 +1,6 @@
 import { OverlayElement } from "./components/overlay_element";
 import { OverlayAlignment } from "./overlay";
-import { FlexibleOverlayConstraint, OverlayConstraint, OverlayConstraintOverflowed, OverlayConstraintSized } from "./overlay_constraint";
+import { FlexibleOverlayConstraint, OverlayConstraint } from "./overlay_constraint";
 import { OverlayRenderAdjuster } from "./overlay_render_adjuster";
 import { DOMRectUtil } from "./utils/dom_rect";
 

@@ -1,7 +1,7 @@
 import { OverlayElement } from "./components/overlay_element";
 import { OverlayAlignment, OverlayBehavior } from "./overlay";
 import { DrivenOverlayConstraint, OverlayConstraint } from "./overlay_constraint";
-import { DrivenOverlayRenderAdjuster, OverlayRenderAdjuster } from "./overlay_render_adjuster";
+import { DrivenOverlayRenderCorrector, OverlayRenderCorrector } from "./overlay_render_corrector";
 import { DOMRectUtil } from "./utils/dom_rect";
 
 export type OverlayRenderResult = {
@@ -24,10 +24,10 @@ export abstract class OverlayRender<T extends OverlayConstraint> {
     ): T;
 
     /** Returns the overlay render adjuster instance that is created. */
-    abstract createOverlayRenderAdjuster(
+    abstract createOverlayRenderCorrector(
         element: OverlayElement,
         behavior: OverlayBehavior
-    ): OverlayRenderAdjuster<T>;
+    ): OverlayRenderCorrector<T>;
 
     reflow(target: HTMLElement, result: Partial<DOMRect>): DOMRect {
         if (result?.width != null) {
@@ -55,11 +55,11 @@ export abstract class DrivenOverlayRender extends OverlayRender<DrivenOverlayCon
         return new DrivenOverlayConstraint(viewport, alignment);
     }
 
-    createOverlayRenderAdjuster(
+    createOverlayRenderCorrector(
         element: OverlayElement,
         behavior: OverlayBehavior
-    ): DrivenOverlayRenderAdjuster {
-        return new DrivenOverlayRenderAdjuster(element, behavior);
+    ): DrivenOverlayRenderCorrector {
+        return new DrivenOverlayRenderCorrector(element, behavior);
     }
 }
 
@@ -78,7 +78,7 @@ export class BottomOverlayRender extends DrivenOverlayRender {
         overlay = DOMRectUtil.merge(overlay, {x: centeredX, y: centeredY});
 
         const constraint = this.createOverlayConstraint(viewport, OverlayAlignment.ALL);
-        const adjuster = this.createOverlayRenderAdjuster(element, behavior);
+        const adjuster = this.createOverlayRenderCorrector(element, behavior);
         
         overlay = adjuster.performLayout(overlay, constraint);
         

@@ -1,7 +1,7 @@
 import { OverlayElement } from "./components/overlay_element";
 import { OverlayAlignment, OverlayBehavior } from "./overlay";
 import { DrivenOverlayConstraint, OverlayConstraint } from "./overlay_constraint";
-import { DrivenOverlayRenderCorrector, OverlayLayoutCorrector } from "./overlay_layout_corrector";
+import { DrivenOverlayRenderCorrector, OverlayLayoutCorrector, OverlayLayoutRepositionCallback } from "./overlay_layout_corrector";
 import { DOMRectUtil } from "./utils/dom_rect";
 
 export type OverlayLayoutPosition = { x: number; y: number; };
@@ -11,10 +11,6 @@ export type OverlayLayoutResult = {
     correctedRect: DOMRect
 };
 
-export class OverlayRect {
-    constructor(public parent: DOMRect, public reflow: () => DOMRect) {}
-}
-
 export abstract class OverlayLayout<T extends OverlayConstraint> {
     /**
      * Calculates the static position and size where the overlay element
@@ -22,6 +18,10 @@ export abstract class OverlayLayout<T extends OverlayConstraint> {
      */
     abstract performLayout(element: OverlayElement): OverlayLayoutResult;
 
+    /**
+     * Static position where the overlay element should be located
+     * without overflow consideration.
+     */
     abstract perfromLayoutPosition(overlay: DOMRect, target: DOMRect): OverlayLayoutPosition;
 
     /** Returns the overlay constraint instance that is created. */
@@ -33,25 +33,9 @@ export abstract class OverlayLayout<T extends OverlayConstraint> {
     /** Returns the overlay render adjuster instance that is created. */
     abstract createOverlayLayoutCorrector(
         element: OverlayElement,
-        behavior: OverlayBehavior
+        behavior: OverlayBehavior,
+        repositionCallback: OverlayLayoutRepositionCallback
     ): OverlayLayoutCorrector<T>;
-
-    reflow(target: HTMLElement, result: Partial<DOMRect>): DOMRect {
-        if (result?.width != null) {
-            target.style.width = `${result.width}px`;
-        }
-        if (result?.height != null) {
-            target.style.height = `${result.height}px`;
-        }
-        if (result.x != null) {
-            target.style.left = `${result.x}px`;
-        }
-        if (result.y != null) {
-            target.style.top = `${result.y}px`;
-        }
-
-        return target.getBoundingClientRect();
-    }
 }
 
 export abstract class DrivenOverlayLayout extends OverlayLayout<DrivenOverlayConstraint> {
@@ -64,9 +48,10 @@ export abstract class DrivenOverlayLayout extends OverlayLayout<DrivenOverlayCon
 
     createOverlayLayoutCorrector(
         element: OverlayElement,
-        behavior: OverlayBehavior
+        behavior: OverlayBehavior,
+        repositionCallback: OverlayLayoutRepositionCallback
     ): DrivenOverlayRenderCorrector {
-        return new DrivenOverlayRenderCorrector(element, behavior);
+        return new DrivenOverlayRenderCorrector(behavior, element, repositionCallback);
     }
 
     performLayout(element: OverlayElement): OverlayLayoutResult {
@@ -77,7 +62,11 @@ export abstract class DrivenOverlayLayout extends OverlayLayout<DrivenOverlayCon
 
         const initialRect = DOMRectUtil.merge(overlay, this.perfromLayoutPosition(overlay, target));
         const constraint = this.createOverlayConstraint(viewport, OverlayAlignment.ALL);
-        const corrector = this.createOverlayLayoutCorrector(element, behavior);
+        const corrector = this.createOverlayLayoutCorrector(
+            element,
+            behavior,
+            (rect) => this.perfromLayoutPosition(rect, target)
+        );
 
         const correctedRect = corrector.performLayout(initialRect, constraint);
 

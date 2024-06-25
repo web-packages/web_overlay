@@ -1,7 +1,7 @@
 import { OverlayElement } from "./components/overlay_element";
 import { OverlayAlignment, OverlayBehavior } from "./overlay";
 import { DrivenOverlayConstraint, OverlayConstraint } from "./overlay_constraint";
-import { DrivenOverlayRenderCorrector, OverlayLayoutCorrector } from "./overlay_layout_corrector";
+import { DrivenOverlayRenderCorrector, OverlayLayoutCorrector, OverlayLayoutRepositionCallback } from "./overlay_layout_corrector";
 export type OverlayLayoutPosition = {
     x: number;
     y: number;
@@ -10,21 +10,15 @@ export type OverlayLayoutResult = {
     initialRect: DOMRect;
     correctedRect: DOMRect;
 };
-export declare class OverlayRect {
-    parent: DOMRect;
-    reflow: () => DOMRect;
-    constructor(parent: DOMRect, reflow: () => DOMRect);
-}
 export declare abstract class OverlayLayout<T extends OverlayConstraint> {
     abstract performLayout(element: OverlayElement): OverlayLayoutResult;
     abstract perfromLayoutPosition(overlay: DOMRect, target: DOMRect): OverlayLayoutPosition;
     abstract createOverlayConstraint(viewport: DOMRect, alignment: OverlayAlignment): T;
-    abstract createOverlayLayoutCorrector(element: OverlayElement, behavior: OverlayBehavior): OverlayLayoutCorrector<T>;
-    reflow(target: HTMLElement, result: Partial<DOMRect>): DOMRect;
+    abstract createOverlayLayoutCorrector(element: OverlayElement, behavior: OverlayBehavior, repositionCallback: OverlayLayoutRepositionCallback): OverlayLayoutCorrector<T>;
 }
 export declare abstract class DrivenOverlayLayout extends OverlayLayout<DrivenOverlayConstraint> {
     createOverlayConstraint(viewport: DOMRect, alignment: OverlayAlignment): DrivenOverlayConstraint;
-    createOverlayLayoutCorrector(element: OverlayElement, behavior: OverlayBehavior): DrivenOverlayRenderCorrector;
+    createOverlayLayoutCorrector(element: OverlayElement, behavior: OverlayBehavior, repositionCallback: OverlayLayoutRepositionCallback): DrivenOverlayRenderCorrector;
     performLayout(element: OverlayElement): OverlayLayoutResult;
 }
 export declare abstract class VerticalCenterOverlayLayout extends DrivenOverlayLayout {

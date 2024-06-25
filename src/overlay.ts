@@ -1,6 +1,6 @@
 import { OverlayElement } from "./components/overlay_element";
 import { OverlayConstraint } from "./overlay_constraint";
-import { BottomOverlayLayout, LeftOverlayLayout, OverlayLayout, RightOverlayLayout, TopOverlayLayout } from "./overlay_layout";
+import { BottomOverlayLayout, LeftOverlayLayout, OverlayLayout, OverlayLayoutPosition, RightOverlayLayout, TopOverlayLayout } from "./overlay_layout";
 
 export const OverlayDirection = {
     BOTTOM: new BottomOverlayLayout(),
@@ -51,5 +51,31 @@ export class Overlay {
 
     static detach(element: HTMLElement) {
         console.log(this.overlays.get(element));
+    }
+
+    static at(
+        element: HTMLElement,
+        parent: HTMLElement = document.body,
+        behavior: OverlayBehavior = { layout: OverlayDirection.BOTTOM },
+        position: OverlayLayoutPosition,
+    ) {
+        const target = document.createElement("div");
+        target.style.position = "fixed";
+        target.style.width = "0px";
+        target.style.height = "0px";
+        target.style.left = `${position.x}px`;
+        target.style.top = `${position.y}px`;
+
+        const wrapper = document.createElement("overlay-wrapper") as OverlayElement;
+        wrapper.append(element);
+        wrapper.target = target;
+        wrapper.parent = parent;
+        wrapper.behavior = behavior;
+
+        this.overlays.set(element, wrapper);
+        parent.append(target);
+        parent.append(wrapper);
+
+        return wrapper;
     }
 }

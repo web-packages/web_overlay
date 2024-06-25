@@ -1,6 +1,6 @@
 import { OverlayElement } from "./components/overlay_element";
 import { OverlayConstraint } from "./overlay_constraint";
-import { BottomOverlayLayout, LeftOverlayLayout, OverlayLayout, RightOverlayLayout, TopOverlayLayout } from "./overlay_layout";
+import { BottomOverlayLayout, LeftOverlayLayout, OverlayLayout, OverlayLayoutPosition, RightOverlayLayout, TopOverlayLayout } from "./overlay_layout";
 export declare const OverlayDirection: {
     BOTTOM: BottomOverlayLayout;
     TOP: TopOverlayLayout;
@@ -24,4 +24,5 @@ export declare class Overlay {
     private static overlays;
     static attach(element: HTMLElement, target: HTMLElement, parent?: HTMLElement, behavior?: OverlayBehavior): OverlayElement;
     static detach(element: HTMLElement): void;
+    static at(element: HTMLElement, parent: HTMLElement, behavior: OverlayBehavior, position: OverlayLayoutPosition): OverlayElement;
 }

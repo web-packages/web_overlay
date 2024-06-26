@@ -4,7 +4,7 @@ import { OverlayLayoutResult } from "../overlay_layout";
 export type OverlayReflowBehindBuilder = (element: HTMLElement, reflowed: OverlayLayoutResult) => HTMLElement;
 
 export class OverlayElement extends HTMLElement {
-    target: HTMLElement;
+    target: HTMLElement | DOMRect;
     parent: HTMLElement;
     behavior: OverlayBehavior;
     observer: MutationObserver;
@@ -12,6 +12,14 @@ export class OverlayElement extends HTMLElement {
     /** The target element wrapped by this overlay wrapper. */
     get raw() {
         return this.firstElementChild as HTMLElement;
+    }
+
+    get targetRect(): DOMRect {
+        return this.target instanceof HTMLElement ? this.target.getBoundingClientRect() : this.target;
+    }
+
+    get viewportRect(): DOMRect {
+        return this.parent.getBoundingClientRect();
     }
 
     /** Called when after the layout calculation has finally been completed. */

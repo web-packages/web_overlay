@@ -26,7 +26,18 @@ export interface OverlayBehavior<T extends OverlayConstraint = any> {
 }
 export declare class Overlay {
     private static overlays;
-    static attach(element: HTMLElement, target: HTMLElement, parent?: HTMLElement, behavior?: OverlayBehavior): OverlayElement;
+    private static defaultBehavior;
+    static attach({ element, target, parent, behavior }: {
+        element: HTMLElement;
+        target: HTMLElement;
+        parent: HTMLElement;
+        behavior: OverlayBehavior;
+    }): OverlayElement;
     static detach(element: HTMLElement): void;
-    static at(element: HTMLElement, parent: HTMLElement, behavior: OverlayBehavior, position: OverlayLayoutPosition): OverlayElement;
+    static at({ element, parent, behavior, position }: {
+        element: HTMLElement;
+        parent: HTMLElement;
+        behavior: OverlayBehavior;
+        position: OverlayLayoutPosition;
+    }): OverlayElement;
 }

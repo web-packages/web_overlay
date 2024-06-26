@@ -36,12 +36,26 @@ export class SizedOverlayLayoutCorrector extends OverlayLayoutCorrector<DrivenOv
 export class PositionedOverlayLayoutCorrector extends OverlayLayoutCorrector<DrivenOverlayConstraint> {
     performLayoutVertical(rect: DOMRect, constraint: DrivenOverlayConstraint): DOMRect {
         const overflowed = constraint.getOverflowed(rect);
-        return DOMRectUtil.merge(rect, {x: rect.x + overflowed.left});
+
+        if (overflowed.bottom) {
+            rect = DOMRectUtil.merge(rect, {y: rect.y - overflowed.bottom});
+        } else if (overflowed.top) {
+            rect = DOMRectUtil.merge(rect, {y: rect.y + overflowed.top});
+        }
+
+        return rect;
     }
 
     performLayoutHorizontal(rect: DOMRect, constraint: DrivenOverlayConstraint): DOMRect {
         const overflowed = constraint.getOverflowed(rect);
-        return DOMRectUtil.merge(rect, {x: rect.x - Math.max(overflowed.right, constraint.viewport.left)});
+
+        if (overflowed.left) {
+            rect = DOMRectUtil.merge(rect, {x: rect.x - Math.max(overflowed.right, constraint.viewport.left)});
+        } else if (overflowed.right) {
+            rect = DOMRectUtil.merge(rect, {x: rect.x - Math.max(overflowed.right, constraint.viewport.left)});
+        }
+
+        return rect;
     }
 }
 

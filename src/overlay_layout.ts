@@ -55,9 +55,9 @@ export abstract class DrivenOverlayLayout extends OverlayLayout<DrivenOverlayCon
     }
 
     performLayout(element: OverlayElement): OverlayLayoutResult {
-        const overlay = element.getBoundingClientRect();
-        const target = element.target.getBoundingClientRect();
-        const viewport = element.parent.getBoundingClientRect();
+        const overlay  = element.getBoundingClientRect();
+        const target   = element.targetRect;
+        const viewport = element.viewportRect;
         const behavior = element.behavior;
 
         const initialRect = DOMRectUtil.merge(overlay, this.perfromLayoutPosition(overlay, target));

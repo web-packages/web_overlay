@@ -23,8 +23,8 @@ export type OverlayLayoutModifierByDirection = {
     horizontal: OverlayLayoutModifier;
 };
 export interface OverlayBehavior<T extends OverlayConstraint = any> {
-    layout: OverlayLayout<T>;
-    modifier?: OverlayLayoutModifier | OverlayLayoutModifierByDirection;
+    direction: OverlayLayout<T>;
+    alignment?: OverlayLayoutModifier | OverlayLayoutModifierByDirection;
     viewportPadding?: number;
 }
 export declare class Overlay {

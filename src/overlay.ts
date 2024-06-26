@@ -29,14 +29,14 @@ export type OverlayLayoutModifierByDirection = {
 }
 
 export interface OverlayBehavior<T extends OverlayConstraint = any> {
-    layout: OverlayLayout<T>,
-    modifier?: OverlayLayoutModifier | OverlayLayoutModifierByDirection,
+    direction: OverlayLayout<T>,
+    alignment?: OverlayLayoutModifier | OverlayLayoutModifierByDirection,
     viewportPadding?: number;
 }
 
 export class Overlay {
     private static overlays = new Map<HTMLElement, OverlayElement>();
-    private static defaultBehavior: OverlayBehavior = { layout: OverlayDirection.BOTTOM_CENTER }
+    private static defaultBehavior: OverlayBehavior = { direction: OverlayDirection.BOTTOM_CENTER }
     
     static attach({element, target, parent, behavior}: {
         element: HTMLElement,

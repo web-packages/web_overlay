@@ -38,7 +38,7 @@ export abstract class DrivenOverlayLayout extends OverlayLayout<DrivenOverlayCon
         const target   = element.targetRect;
         const viewport = element.viewportRect;
         const behavior = element.behavior;
-        const modifier = behavior?.modifier ?? OverlayAlignment.ALL;
+        const modifier = behavior?.alignment ?? OverlayAlignment.ALL;
 
         const initialRect = DOMRectUtil.merge(overlay, this.perfromLayoutPosition(overlay, target));
         const constraint = this.createOverlayConstraint(viewport);

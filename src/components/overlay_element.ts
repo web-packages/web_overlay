@@ -70,7 +70,8 @@ export class OverlayElement extends HTMLElement {
     }
 
     performLayout() {
-        const result = this.behavior.layout.performLayout(this);
+        const layout = this.behavior.direction;
+        const result = layout.performLayout(this); 
         const target = result.correctedRect;
 
         this.style.width = `${target.width}px`;

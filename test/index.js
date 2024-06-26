@@ -22,6 +22,6 @@ Overlay.attach(
     overlayTarget,
     overlayTarget.parentElement,
     {
-        layout: OverlayDirection.BOTTOM
+        layout: OverlayDirection.BOTTOM_CENTER
     }
 );

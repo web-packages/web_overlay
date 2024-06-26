@@ -29,11 +29,23 @@ export declare abstract class HorizontalCenterOverlayLayout extends DrivenOverla
     perfromLayoutPosition(overlay: DOMRect, target: DOMRect): OverlayLayoutPosition;
     abstract getPositionVertical(overlay: DOMRect, target: DOMRect): number;
 }
-export declare class BottomOverlayLayout extends HorizontalCenterOverlayLayout {
+export declare class BottomCenterOverlayLayout extends HorizontalCenterOverlayLayout {
     getPositionVertical(_: DOMRect, target: DOMRect): number;
 }
-export declare class TopOverlayLayout extends HorizontalCenterOverlayLayout {
+export declare class BottomLeftOverlayLayout extends DrivenOverlayLayout {
+    perfromLayoutPosition(overlay: DOMRect, target: DOMRect): OverlayLayoutPosition;
+}
+export declare class BottomRightOverlayLayout extends DrivenOverlayLayout {
+    perfromLayoutPosition(_: DOMRect, target: DOMRect): OverlayLayoutPosition;
+}
+export declare class TopCenterOverlayLayout extends HorizontalCenterOverlayLayout {
     getPositionVertical(overlay: DOMRect, target: DOMRect): number;
+}
+export declare class TopLeftOverlayLayout extends DrivenOverlayLayout {
+    perfromLayoutPosition(overlay: DOMRect, target: DOMRect): OverlayLayoutPosition;
+}
+export declare class TopRightOverlayLayout extends DrivenOverlayLayout {
+    perfromLayoutPosition(overlay: DOMRect, target: DOMRect): OverlayLayoutPosition;
 }
 export declare class LeftOverlayLayout extends VerticalCenterOverlayLayout {
     getPositionHorizontal(overlay: DOMRect, target: DOMRect): number;

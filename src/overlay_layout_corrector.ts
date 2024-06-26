@@ -23,7 +23,7 @@ export abstract class OverlayLayoutCorrector<T extends OverlayConstraint> {
     abstract performLayoutHorizontal(rect: DOMRect, constraint: T): DOMRect;
 }
 
-export class SizedOverlayLayoutCorrector<T extends OverlayConstraint> extends OverlayLayoutCorrector<T> {
+export class SizedOverlayLayoutCorrector extends OverlayLayoutCorrector<DrivenOverlayConstraint> {
     performLayoutVertical(rect: DOMRect, constraint: DrivenOverlayConstraint): DOMRect {
         return rect;
     }
@@ -33,13 +33,15 @@ export class SizedOverlayLayoutCorrector<T extends OverlayConstraint> extends Ov
     }
 }
 
-export class PositionedOverlayLayoutCorrector<T extends OverlayConstraint> extends OverlayLayoutCorrector<T> {
-    performLayoutVertical(rect: DOMRect, constraint: T): DOMRect {
-        return rect;
+export class PositionedOverlayLayoutCorrector extends OverlayLayoutCorrector<DrivenOverlayConstraint> {
+    performLayoutVertical(rect: DOMRect, constraint: DrivenOverlayConstraint): DOMRect {
+        const overflowed = constraint.getOverflowed(rect);
+        return DOMRectUtil.merge(rect, {x: rect.x + overflowed.left});
     }
 
-    performLayoutHorizontal(rect: DOMRect, constraint: T): DOMRect {
-        return rect;
+    performLayoutHorizontal(rect: DOMRect, constraint: DrivenOverlayConstraint): DOMRect {
+        const overflowed = constraint.getOverflowed(rect);
+        return DOMRectUtil.merge(rect, {x: rect.x - Math.max(overflowed.right, constraint.viewport.left)});
     }
 }
 

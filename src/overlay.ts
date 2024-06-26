@@ -1,12 +1,16 @@
 import { OverlayElement } from "./components/overlay_element";
 import { OverlayConstraint } from "./overlay_constraint";
-import { BottomOverlayLayout, LeftOverlayLayout, OverlayLayout, OverlayLayoutPosition, RightOverlayLayout, TopOverlayLayout } from "./overlay_layout";
+import { BottomCenterOverlayLayout, BottomLeftOverlayLayout, BottomRightOverlayLayout, LeftOverlayLayout, OverlayLayout, OverlayLayoutPosition, RightOverlayLayout, TopCenterOverlayLayout, TopLeftOverlayLayout, TopRightOverlayLayout } from "./overlay_layout";
 
 export const OverlayDirection = {
-    BOTTOM: new BottomOverlayLayout(),
-    TOP: new TopOverlayLayout(),
-    Left: new LeftOverlayLayout(),
-    Right: new RightOverlayLayout()
+    BOTTOM_CENTER: new BottomCenterOverlayLayout(),
+    BOTTOM_RIGHT: new BottomRightOverlayLayout(),
+    BOTTOM_LEFT: new BottomLeftOverlayLayout(),
+    TOP_CENTER: new TopCenterOverlayLayout(),
+    TOP_RIGHT: new TopRightOverlayLayout(),
+    TOP_LEFT: new TopLeftOverlayLayout(),
+    LEFT: new LeftOverlayLayout(),
+    RIGHT: new RightOverlayLayout()
 }
 
 export enum OverlayAlignment {
@@ -31,7 +35,7 @@ export class Overlay {
         element: HTMLElement,
         target: HTMLElement,
         parent: HTMLElement = document.body,
-        behavior: OverlayBehavior = { layout: OverlayDirection.BOTTOM }
+        behavior: OverlayBehavior = { layout: OverlayDirection.BOTTOM_CENTER }
     ) {
         if (element == null) throw new Error("todo");
         if (target == null) throw new Error("todo");
@@ -56,7 +60,7 @@ export class Overlay {
     static at(
         element: HTMLElement,
         parent: HTMLElement = document.body,
-        behavior: OverlayBehavior = { layout: OverlayDirection.BOTTOM },
+        behavior: OverlayBehavior = { layout: OverlayDirection.BOTTOM_CENTER },
         position: OverlayLayoutPosition,
     ) {
         const target = document.createElement("div");

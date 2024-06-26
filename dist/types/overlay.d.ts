@@ -1,11 +1,15 @@
 import { OverlayElement } from "./components/overlay_element";
 import { OverlayConstraint } from "./overlay_constraint";
-import { BottomOverlayLayout, LeftOverlayLayout, OverlayLayout, OverlayLayoutPosition, RightOverlayLayout, TopOverlayLayout } from "./overlay_layout";
+import { BottomCenterOverlayLayout, BottomLeftOverlayLayout, BottomRightOverlayLayout, LeftOverlayLayout, OverlayLayout, OverlayLayoutPosition, RightOverlayLayout, TopCenterOverlayLayout, TopLeftOverlayLayout, TopRightOverlayLayout } from "./overlay_layout";
 export declare const OverlayDirection: {
-    BOTTOM: BottomOverlayLayout;
-    TOP: TopOverlayLayout;
-    Left: LeftOverlayLayout;
-    Right: RightOverlayLayout;
+    BOTTOM_CENTER: BottomCenterOverlayLayout;
+    BOTTOM_RIGHT: BottomRightOverlayLayout;
+    BOTTOM_LEFT: BottomLeftOverlayLayout;
+    TOP_CENTER: TopCenterOverlayLayout;
+    TOP_RIGHT: TopRightOverlayLayout;
+    TOP_LEFT: TopLeftOverlayLayout;
+    LEFT: LeftOverlayLayout;
+    RIGHT: RightOverlayLayout;
 };
 export declare enum OverlayAlignment {
     ALL = "all",

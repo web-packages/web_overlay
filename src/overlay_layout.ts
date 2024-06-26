@@ -81,7 +81,7 @@ export abstract class VerticalCenterOverlayLayout extends DrivenOverlayLayout {
     perfromLayoutPosition(overlay: DOMRect, target: DOMRect): OverlayLayoutPosition {
         const x = this.getPositionHorizontal(overlay, target);
         const y = target.y + (target.height - overlay.height) / 2;
-        
+
         return {x, y};
     }
 
@@ -99,15 +99,51 @@ export abstract class HorizontalCenterOverlayLayout extends DrivenOverlayLayout 
     abstract getPositionVertical(overlay: DOMRect, target: DOMRect): number;
 }
 
-export class BottomOverlayLayout extends HorizontalCenterOverlayLayout {
+export class BottomCenterOverlayLayout extends HorizontalCenterOverlayLayout {
     getPositionVertical(_: DOMRect, target: DOMRect): number {
         return target.bottom;
     }
 }
 
-export class TopOverlayLayout extends HorizontalCenterOverlayLayout {
+export class BottomLeftOverlayLayout extends DrivenOverlayLayout {
+    perfromLayoutPosition(overlay: DOMRect, target: DOMRect): OverlayLayoutPosition {
+        return {
+            x: target.right - overlay.width,
+            y: target.bottom
+        }
+    }
+}
+
+export class BottomRightOverlayLayout extends DrivenOverlayLayout {
+    perfromLayoutPosition(_: DOMRect, target: DOMRect): OverlayLayoutPosition {
+        return {
+            x: target.left,
+            y: target.bottom
+        }
+    }
+}
+
+export class TopCenterOverlayLayout extends HorizontalCenterOverlayLayout {
     getPositionVertical(overlay: DOMRect, target: DOMRect): number {
         return target.top - overlay.height;
+    }
+}
+
+export class TopLeftOverlayLayout extends DrivenOverlayLayout {
+    perfromLayoutPosition(overlay: DOMRect, target: DOMRect): OverlayLayoutPosition {
+        return {
+            x: target.right - overlay.width,
+            y: target.y - overlay.height
+        }
+    }
+}
+
+export class TopRightOverlayLayout extends DrivenOverlayLayout {
+    perfromLayoutPosition(overlay: DOMRect, target: DOMRect): OverlayLayoutPosition {
+        return {
+            x: target.left,
+            y: target.top - overlay.height
+        }
     }
 }
 

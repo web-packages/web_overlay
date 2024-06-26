@@ -11,13 +11,13 @@ export declare abstract class OverlayLayoutCorrector<T extends OverlayConstraint
     abstract performLayoutVertical(rect: DOMRect, constraint: T): DOMRect;
     abstract performLayoutHorizontal(rect: DOMRect, constraint: T): DOMRect;
 }
-export declare class SizedOverlayLayoutCorrector<T extends OverlayConstraint> extends OverlayLayoutCorrector<T> {
+export declare class SizedOverlayLayoutCorrector extends OverlayLayoutCorrector<DrivenOverlayConstraint> {
     performLayoutVertical(rect: DOMRect, constraint: DrivenOverlayConstraint): DOMRect;
     performLayoutHorizontal(rect: DOMRect, constraint: DrivenOverlayConstraint): DOMRect;
 }
-export declare class PositionedOverlayLayoutCorrector<T extends OverlayConstraint> extends OverlayLayoutCorrector<T> {
-    performLayoutVertical(rect: DOMRect, constraint: T): DOMRect;
-    performLayoutHorizontal(rect: DOMRect, constraint: T): DOMRect;
+export declare class PositionedOverlayLayoutCorrector extends OverlayLayoutCorrector<DrivenOverlayConstraint> {
+    performLayoutVertical(rect: DOMRect, constraint: DrivenOverlayConstraint): DOMRect;
+    performLayoutHorizontal(rect: DOMRect, constraint: DrivenOverlayConstraint): DOMRect;
 }
 export declare class DrivenOverlayRenderCorrector extends OverlayLayoutCorrector<DrivenOverlayConstraint> {
     behavior: OverlayBehavior;

@@ -65,7 +65,7 @@ export class SizedOverlayLayoutBehavior extends OverlayLayoutBehavior {
         }
 
         if (markNeedReposition) {
-            rect = DOMRectUtil.merge(rect, reposition(rect));
+            rect = DOMRectUtil.merge(rect, {y: reposition(rect).y});
         }
 
         return rect;

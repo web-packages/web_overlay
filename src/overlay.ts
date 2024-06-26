@@ -30,7 +30,8 @@ export type OverlayLayoutBehaviorByDirection = {
 
 export interface OverlayBehavior<T extends OverlayConstraint = any> {
     layout: OverlayLayout<T>,
-    alignment?: OverlayLayoutBehavior | OverlayLayoutBehaviorByDirection
+    alignment?: OverlayLayoutBehavior | OverlayLayoutBehaviorByDirection,
+    viewportPadding?: number;
 }
 
 export class Overlay {

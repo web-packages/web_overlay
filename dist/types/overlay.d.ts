@@ -25,6 +25,7 @@ export type OverlayLayoutBehaviorByDirection = {
 export interface OverlayBehavior<T extends OverlayConstraint = any> {
     layout: OverlayLayout<T>;
     alignment?: OverlayLayoutBehavior | OverlayLayoutBehaviorByDirection;
+    viewportPadding?: number;
 }
 export declare class Overlay {
     private static overlays;

@@ -1,7 +1,7 @@
 import { OverlayElement } from "./components/overlay_element";
 import { OverlayAlignment } from "./overlay";
 import { DrivenOverlayConstraint, OverlayConstraint } from "./overlay_constraint";
-import { PositionedOverlayLayoutBehavior, SizedOverlayLayoutBehavior } from "./overlay_layout_behavior";
+import { OverlayLayoutBehavior, PositionedOverlayLayoutBehavior, SizedOverlayLayoutBehavior } from "./overlay_layout_behavior";
 import { DOMRectUtil } from "./utils/dom_rect";
 
 export type OverlayLayoutPosition = { x: number; y: number; };
@@ -38,14 +38,25 @@ export abstract class DrivenOverlayLayout extends OverlayLayout<DrivenOverlayCon
         const target   = element.targetRect;
         const viewport = element.viewportRect;
         const behavior = element.behavior;
+        const alignment = behavior?.alignment ?? OverlayAlignment.ALL;
 
         const initialRect = DOMRectUtil.merge(overlay, this.perfromLayoutPosition(overlay, target));
         const constraint = this.createOverlayConstraint(viewport);
-        const corrector = new PositionedOverlayLayoutBehavior(new SizedOverlayLayoutBehavior());
-
-        const correctedRect = corrector.performLayout(element, initialRect, constraint, (rect) => {
+        const reposition = (rect: DOMRect) => {
             return this.perfromLayoutPosition(rect, target);
-        });
+        };
+        
+        let correctedRect = initialRect;
+
+        if (alignment instanceof OverlayLayoutBehavior) {
+            correctedRect = alignment.performLayout(element, initialRect, constraint, reposition);
+        } else {
+            console.assert(alignment.horizontal != null);
+            console.assert(alignment.vertical != null);
+            const hr = alignment.horizontal.performLayoutHorizontal(element, initialRect, constraint, reposition);
+            const vr = alignment.vertical.performLayoutVertical(element, hr, constraint, reposition);
+            correctedRect = vr;
+        }
 
         return {
             initialRect: initialRect,

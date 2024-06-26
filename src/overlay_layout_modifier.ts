@@ -5,8 +5,8 @@ import { DOMRectUtil } from "./utils/dom_rect";
 export type OverlayLayoutRepositionCallback = (rect: DOMRect) => OverlayLayoutPosition;
 type RC = OverlayLayoutRepositionCallback;
 
-export abstract class OverlayLayoutBehavior<T extends OverlayConstraint = OverlayConstraint> {
-    constructor(public parent?: OverlayLayoutBehavior<T>) {}
+export abstract class OverlayLayoutModifier<T extends OverlayConstraint = OverlayConstraint> {
+    constructor(public parent?: OverlayLayoutModifier<T>) {}
 
     performLayout(
         element: HTMLElement,
@@ -37,7 +37,7 @@ export abstract class OverlayLayoutBehavior<T extends OverlayConstraint = Overla
     ): DOMRect;
 }
 
-export class SizedOverlayLayoutBehavior extends OverlayLayoutBehavior {
+export class SizedOverlayLayoutModifier extends OverlayLayoutModifier {
     performLayoutVertical(_: HTMLElement, rect: DOMRect, constraint: OverlayConstraint): DOMRect {
         let overflowed = constraint.overflowed(rect);
 
@@ -76,7 +76,7 @@ export class SizedOverlayLayoutBehavior extends OverlayLayoutBehavior {
     }
 }
 
-export class PositionedOverlayLayoutBehavior extends OverlayLayoutBehavior {
+export class PositionedOverlayLayoutModifier extends OverlayLayoutModifier {
     performLayoutVertical(_: HTMLElement, rect: DOMRect, constraint: OverlayConstraint, reposition: RC): DOMRect {
         let overflowed = constraint.overflowed(rect);
         let markNeedDelegateToParent = false;
@@ -128,7 +128,7 @@ export class PositionedOverlayLayoutBehavior extends OverlayLayoutBehavior {
     }
 }
 
-export class AbsoluateOverlayLayoutBehavior extends OverlayLayoutBehavior {
+export class AbsoluateOverlayLayoutModifier extends OverlayLayoutModifier {
     performLayoutVertical(_: HTMLElement, rect: DOMRect): DOMRect {
         return rect;
     }

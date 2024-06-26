@@ -1,7 +1,7 @@
 import { OverlayElement } from "./components/overlay_element";
 import { OverlayConstraint } from "./overlay_constraint";
 import { BottomCenterOverlayLayout, BottomLeftOverlayLayout, BottomRightOverlayLayout, LeftOverlayLayout, OverlayLayout, OverlayLayoutPosition, RightOverlayLayout, TopCenterOverlayLayout, TopLeftOverlayLayout, TopRightOverlayLayout } from "./overlay_layout";
-import { AbsoluateOverlayLayoutBehavior, OverlayLayoutBehavior, PositionedOverlayLayoutBehavior, SizedOverlayLayoutBehavior } from "./overlay_layout_behavior";
+import { AbsoluateOverlayLayoutModifier, OverlayLayoutModifier, PositionedOverlayLayoutModifier, SizedOverlayLayoutModifier } from "./overlay_layout_modifier";
 
 /** Overlay layout objects that define alignment directions are defined. */
 export const OverlayDirection = {
@@ -17,20 +17,20 @@ export const OverlayDirection = {
 
 /** Signature for types about the overlay alignment behavior. */
 export const OverlayAlignment = {
-    ALL: new PositionedOverlayLayoutBehavior(new SizedOverlayLayoutBehavior()),
-    NONE: new AbsoluateOverlayLayoutBehavior(),
-    SIZE: new SizedOverlayLayoutBehavior(),
-    POSITION: new PositionedOverlayLayoutBehavior()
+    ALL: new PositionedOverlayLayoutModifier(new SizedOverlayLayoutModifier()),
+    NONE: new AbsoluateOverlayLayoutModifier(),
+    SIZE: new SizedOverlayLayoutModifier(),
+    POSITION: new PositionedOverlayLayoutModifier()
 }
 
-export type OverlayLayoutBehaviorByDirection = {
-    vertical: OverlayLayoutBehavior,
-    horizontal: OverlayLayoutBehavior
+export type OverlayLayoutModifierByDirection = {
+    vertical: OverlayLayoutModifier,
+    horizontal: OverlayLayoutModifier
 }
 
 export interface OverlayBehavior<T extends OverlayConstraint = any> {
     layout: OverlayLayout<T>,
-    alignment?: OverlayLayoutBehavior | OverlayLayoutBehaviorByDirection,
+    modifier?: OverlayLayoutModifier | OverlayLayoutModifierByDirection,
     viewportPadding?: number;
 }
 

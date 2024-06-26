@@ -23,7 +23,7 @@ Overlay.attach({
     parent: overlayTarget.parentElement,
     behavior: {
         layout: OverlayDirection.BOTTOM_CENTER,
-        alignment: {
+        modifier: {
             horizontal: OverlayAlignment.ALL,
             vertical: OverlayAlignment.NONE
         }

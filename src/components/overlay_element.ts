@@ -51,7 +51,6 @@ export class OverlayElement extends HTMLElement {
         this.style.top = "0px";
         this.style.width = "max-content";
         this.style.height = "max-content";
-        this.style.overflow = "auto";
 
         // Calculate size and position initially and perform layout.
         this.performLayout();

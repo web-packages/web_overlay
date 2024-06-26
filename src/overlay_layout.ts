@@ -1,7 +1,7 @@
 import { OverlayElement } from "./components/overlay_element";
 import { OverlayAlignment } from "./overlay";
 import { DrivenOverlayConstraint, OverlayConstraint } from "./overlay_constraint";
-import { OverlayLayoutBehavior, PositionedOverlayLayoutBehavior, SizedOverlayLayoutBehavior } from "./overlay_layout_behavior";
+import { OverlayLayoutModifier } from "./overlay_layout_modifier";
 import { DOMRectUtil } from "./utils/dom_rect";
 
 export type OverlayLayoutPosition = { x: number; y: number; };
@@ -38,7 +38,7 @@ export abstract class DrivenOverlayLayout extends OverlayLayout<DrivenOverlayCon
         const target   = element.targetRect;
         const viewport = element.viewportRect;
         const behavior = element.behavior;
-        const alignment = behavior?.alignment ?? OverlayAlignment.ALL;
+        const modifier = behavior?.modifier ?? OverlayAlignment.ALL;
 
         const initialRect = DOMRectUtil.merge(overlay, this.perfromLayoutPosition(overlay, target));
         const constraint = this.createOverlayConstraint(viewport);
@@ -48,13 +48,13 @@ export abstract class DrivenOverlayLayout extends OverlayLayout<DrivenOverlayCon
         
         let correctedRect = initialRect;
 
-        if (alignment instanceof OverlayLayoutBehavior) {
-            correctedRect = alignment.performLayout(element, initialRect, constraint, reposition);
+        if (modifier instanceof OverlayLayoutModifier) {
+            correctedRect = modifier.performLayout(element, initialRect, constraint, reposition);
         } else {
-            console.assert(alignment.horizontal != null);
-            console.assert(alignment.vertical != null);
-            const hr = alignment.horizontal.performLayoutHorizontal(element, initialRect, constraint, reposition);
-            const vr = alignment.vertical.performLayoutVertical(element, hr, constraint, reposition);
+            console.assert(modifier.horizontal != null);
+            console.assert(modifier.vertical != null);
+            const hr = modifier.horizontal.performLayoutHorizontal(element, initialRect, constraint, reposition);
+            const vr = modifier.vertical.performLayoutVertical(element, hr, constraint, reposition);
             correctedRect = vr;
         }
 

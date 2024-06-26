@@ -41,10 +41,12 @@ export class SizedOverlayLayoutBehavior extends OverlayLayoutBehavior {
     performLayoutVertical(_: HTMLElement, rect: DOMRect, constraint: OverlayConstraint): DOMRect {
         let overflowed = constraint.overflowed(rect);
 
+        console.log(overflowed);
+
         if (overflowed.bottom) {
-            rect = DOMRectUtil.merge(rect, {y: rect.y + overflowed.top, height: Math.max(rect.height - overflowed.top, 0)});
+            rect = DOMRectUtil.merge(rect, {height: Math.max(rect.height - overflowed.bottom, 0)});
         } else if (overflowed.top) {
-            rect = DOMRectUtil.merge(rect, {y: rect.y + overflowed.top});
+            rect = DOMRectUtil.merge(rect, {y: rect.y + overflowed.top, height: rect.height - overflowed.top});
         }
 
         return rect;
@@ -59,7 +61,7 @@ export class SizedOverlayLayoutBehavior extends OverlayLayoutBehavior {
             rect = DOMRectUtil.reflowHorizontal(element, rect);
             markNeedReposition = true;
         }
-        
+
         if (overflowed.right) {
             rect = DOMRectUtil.merge(rect, {width: rect.width - overflowed.right});
             rect = DOMRectUtil.reflowHorizontal(element, rect);

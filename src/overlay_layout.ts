@@ -1,7 +1,7 @@
 import { OverlayElement } from "./components/overlay_element";
-import { OverlayAlignment, OverlayBehavior } from "./overlay";
+import { OverlayAlignment } from "./overlay";
 import { DrivenOverlayConstraint, OverlayConstraint } from "./overlay_constraint";
-import { DrivenOverlayRenderCorrector, OverlayLayoutCorrector, OverlayLayoutRepositionCallback } from "./overlay_layout_corrector";
+import { PositionedOverlayLayoutBehavior, SizedOverlayLayoutBehavior } from "./overlay_layout_behavior";
 import { DOMRectUtil } from "./utils/dom_rect";
 
 export type OverlayLayoutPosition = { x: number; y: number; };
@@ -25,33 +25,12 @@ export abstract class OverlayLayout<T extends OverlayConstraint> {
     abstract perfromLayoutPosition(overlay: DOMRect, target: DOMRect): OverlayLayoutPosition;
 
     /** Returns the overlay constraint instance that is created. */
-    abstract createOverlayConstraint(
-        viewport: DOMRect,
-        alignment: OverlayAlignment
-    ): T;
-
-    /** Returns the overlay render adjuster instance that is created. */
-    abstract createOverlayLayoutCorrector(
-        element: OverlayElement,
-        behavior: OverlayBehavior,
-        repositionCallback: OverlayLayoutRepositionCallback
-    ): OverlayLayoutCorrector<T>;
+    abstract createOverlayConstraint(viewport: DOMRect): T;
 }
 
 export abstract class DrivenOverlayLayout extends OverlayLayout<DrivenOverlayConstraint> {
-    createOverlayConstraint(
-        viewport: DOMRect,
-        alignment: OverlayAlignment
-    ): DrivenOverlayConstraint {
-        return new DrivenOverlayConstraint(viewport, alignment);
-    }
-
-    createOverlayLayoutCorrector(
-        element: OverlayElement,
-        behavior: OverlayBehavior,
-        repositionCallback: OverlayLayoutRepositionCallback
-    ): DrivenOverlayRenderCorrector {
-        return new DrivenOverlayRenderCorrector(behavior, element, repositionCallback);
+    createOverlayConstraint(viewport: DOMRect): DrivenOverlayConstraint {
+        return new DrivenOverlayConstraint(viewport);
     }
 
     performLayout(element: OverlayElement): OverlayLayoutResult {
@@ -61,14 +40,12 @@ export abstract class DrivenOverlayLayout extends OverlayLayout<DrivenOverlayCon
         const behavior = element.behavior;
 
         const initialRect = DOMRectUtil.merge(overlay, this.perfromLayoutPosition(overlay, target));
-        const constraint = this.createOverlayConstraint(viewport, OverlayAlignment.ALL);
-        const corrector = this.createOverlayLayoutCorrector(
-            element,
-            behavior,
-            (rect) => this.perfromLayoutPosition(rect, target)
-        );
+        const constraint = this.createOverlayConstraint(viewport);
+        const corrector = new PositionedOverlayLayoutBehavior(new SizedOverlayLayoutBehavior());
 
-        const correctedRect = corrector.performLayout(initialRect, constraint);
+        const correctedRect = corrector.performLayout(element, initialRect, constraint, (rect) => {
+            return this.perfromLayoutPosition(rect, target);
+        });
 
         return {
             initialRect: initialRect,

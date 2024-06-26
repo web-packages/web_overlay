@@ -1,6 +1,7 @@
 import { OverlayElement } from "./components/overlay_element";
 import { OverlayConstraint } from "./overlay_constraint";
 import { BottomCenterOverlayLayout, BottomLeftOverlayLayout, BottomRightOverlayLayout, LeftOverlayLayout, OverlayLayout, OverlayLayoutPosition, RightOverlayLayout, TopCenterOverlayLayout, TopLeftOverlayLayout, TopRightOverlayLayout } from "./overlay_layout";
+import { AbsoluateOverlayLayoutBehavior, OverlayLayoutBehavior, PositionedOverlayLayoutBehavior, SizedOverlayLayoutBehavior } from "./overlay_layout_behavior";
 export declare const OverlayDirection: {
     BOTTOM_CENTER: BottomCenterOverlayLayout;
     BOTTOM_RIGHT: BottomRightOverlayLayout;
@@ -11,18 +12,19 @@ export declare const OverlayDirection: {
     LEFT: LeftOverlayLayout;
     RIGHT: RightOverlayLayout;
 };
-export declare enum OverlayAlignment {
-    ALL = "all",
-    NONE = "none",
-    SIZE = "size",
-    POSITION = "position"
-}
+export declare const OverlayAlignment: {
+    ALL: PositionedOverlayLayoutBehavior;
+    NONE: AbsoluateOverlayLayoutBehavior;
+    SIZE: SizedOverlayLayoutBehavior;
+    POSITION: PositionedOverlayLayoutBehavior;
+};
+export type OverlayLayoutBehaviorByDirection = {
+    vertical: OverlayLayoutBehavior;
+    horizontal: OverlayLayoutBehavior;
+};
 export interface OverlayBehavior<T extends OverlayConstraint = any> {
     layout: OverlayLayout<T>;
-    alignment?: {
-        x: OverlayAlignment;
-        y: OverlayAlignment;
-    };
+    alignment?: OverlayLayoutBehavior | OverlayLayoutBehaviorByDirection;
 }
 export declare class Overlay {
     private static overlays;

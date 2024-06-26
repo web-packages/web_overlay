@@ -8,16 +8,13 @@ export type OverlayConstraintOverflowed = {
 }
 
 export abstract class OverlayConstraint {
-    constructor(
-        public viewport: DOMRect,
-        public alignment: OverlayAlignment
-    ) {}
+    constructor(public viewport: DOMRect) {}
 
-    abstract getOverflowed(rect: DOMRect): OverlayConstraintOverflowed;
+    abstract overflowed(rect: DOMRect): OverlayConstraintOverflowed;
 }
 
 export class DrivenOverlayConstraint extends OverlayConstraint {
-    getOverflowed(rect: DOMRect): OverlayConstraintOverflowed {
+    overflowed(rect: DOMRect): OverlayConstraintOverflowed {
         const viewport = this.viewport;
 
         // The distance about how far from the window left of overlay element.

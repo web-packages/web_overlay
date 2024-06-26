@@ -1,4 +1,3 @@
-import { OverlayAlignment } from "./overlay";
 export type OverlayConstraintOverflowed = {
     left: number;
     right: number;
@@ -7,10 +6,9 @@ export type OverlayConstraintOverflowed = {
 };
 export declare abstract class OverlayConstraint {
     viewport: DOMRect;
-    alignment: OverlayAlignment;
-    constructor(viewport: DOMRect, alignment: OverlayAlignment);
-    abstract getOverflowed(rect: DOMRect): OverlayConstraintOverflowed;
+    constructor(viewport: DOMRect);
+    abstract overflowed(rect: DOMRect): OverlayConstraintOverflowed;
 }
 export declare class DrivenOverlayConstraint extends OverlayConstraint {
-    getOverflowed(rect: DOMRect): OverlayConstraintOverflowed;
+    overflowed(rect: DOMRect): OverlayConstraintOverflowed;
 }

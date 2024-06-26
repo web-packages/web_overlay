@@ -58,7 +58,8 @@ export class SizedOverlayLayoutBehavior extends OverlayLayoutBehavior {
             rect = DOMRectUtil.merge(rect, {x: rect.x + overflowed.left, width: rect.width - overflowed.left});
             rect = DOMRectUtil.reflowHorizontal(element, rect);
             markNeedReposition = true;
-        } else if (overflowed.right) {
+        }
+        if (overflowed.right) {
             rect = DOMRectUtil.merge(rect, {width: rect.width - overflowed.right});
             rect = DOMRectUtil.reflowHorizontal(element, rect);
             markNeedReposition = true;

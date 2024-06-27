@@ -58,7 +58,6 @@ export class OverlayElement extends HTMLElement {
         // Called when this element is reflowed or animation progressing.
         if (this.target instanceof HTMLElement) {
             this.observer = new MutationObserver(this.markNeedRepaint.bind(this));
-
             this.observer.observe(this.target, {
                 attributes: true,
                 characterData: true,
@@ -67,19 +66,22 @@ export class OverlayElement extends HTMLElement {
             });
 
             let markNeedRepaint = false;
-            const animationCallback = () => {
+            const startAnimationCallback = () => {
+                markNeedRepaint = true;
+                checkAnimationCallback();
+            } 
+
+            const checkAnimationCallback = () => {
                 this.markNeedRepaint();
                 if (markNeedRepaint) {
-                    requestAnimationFrame(animationCallback);
+                    requestAnimationFrame(checkAnimationCallback);
                 }
             }
 
-            this.target.addEventListener("animationstart", () => {
-                markNeedRepaint = true;
-                animationCallback();
-            });
-
+            this.target.addEventListener("animationstart", startAnimationCallback);
             this.target.addEventListener("animationend", () => markNeedRepaint = false);
+            this.target.addEventListener("transitionstart", startAnimationCallback);
+            this.target.addEventListener("transitionend", () => markNeedRepaint = false);
         }
 
         window.addEventListener("resize", this.markNeedRepaint.bind(this));

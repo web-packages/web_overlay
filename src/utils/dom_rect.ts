@@ -16,4 +16,13 @@ export class DOMRectUtil {
         target.style.height = null;
         return target.getBoundingClientRect();
     }
+
+    static applyPadding(rect: DOMRect, padding: number): DOMRect {
+        return new DOMRect(
+            rect.x + padding,
+            rect.y + padding,
+            rect.width - padding * 2,
+            rect.height - padding * 2
+        )
+    }
 }

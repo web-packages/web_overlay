@@ -25,6 +25,7 @@ export type OverlayLayoutModifierByDirection = {
 export interface OverlayBehavior<T extends OverlayConstraint = any> {
     direction: OverlayLayout<T>;
     alignment?: OverlayLayoutModifier | OverlayLayoutModifierByDirection;
+    targetGap?: number;
     viewportPadding?: number;
 }
 export declare class Overlay {

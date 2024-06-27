@@ -1,5 +1,5 @@
 import { OverlayElement } from "./components/overlay_element";
-import { OverlayAlignment } from "./overlay";
+import { OverlayAlignment, OverlayBehavior } from "./overlay";
 import { DrivenOverlayConstraint, OverlayConstraint } from "./overlay_constraint";
 import { OverlayLayoutModifier } from "./overlay_layout_modifier";
 import { DOMRectUtil } from "./utils/dom_rect";
@@ -22,7 +22,7 @@ export abstract class OverlayLayout<T extends OverlayConstraint> {
      * Static position where the overlay element should be located
      * without overflow consideration.
      */
-    abstract perfromLayoutPosition(overlay: DOMRect, target: DOMRect): OverlayLayoutPosition;
+    abstract perfromLayoutPosition(overlay: DOMRect, target: DOMRect, gap: number): OverlayLayoutPosition;
 
     /** Returns the overlay constraint instance that is created. */
     abstract createOverlayConstraint(viewport: DOMRect): T;
@@ -38,23 +38,28 @@ export abstract class DrivenOverlayLayout extends OverlayLayout<DrivenOverlayCon
         const target   = element.targetRect;
         const viewport = element.viewportRect;
         const behavior = element.behavior;
-        const modifier = behavior?.alignment ?? OverlayAlignment.ALL;
+        const modifier = behavior.alignment ?? OverlayAlignment.ALL;
+        const targetGap = behavior.targetGap ?? 0;
+        const viewportPadding = behavior.viewportPadding ?? 0;
 
-        const initialRect = DOMRectUtil.merge(overlay, this.perfromLayoutPosition(overlay, target));
-        const constraint = this.createOverlayConstraint(viewport);
-        const reposition = (rect: DOMRect) => {
-            return this.perfromLayoutPosition(rect, target);
-        };
+        const getPosition = (rect: DOMRect) => {
+            return this.perfromLayoutPosition(rect, target, targetGap);
+        }
+
+        const initialRect = DOMRectUtil.merge(overlay, getPosition(overlay));
+        const constraint = this.createOverlayConstraint(
+            DOMRectUtil.applyPadding(viewport, viewportPadding)
+        );
         
         let correctedRect = initialRect;
 
         if (modifier instanceof OverlayLayoutModifier) {
-            correctedRect = modifier.performLayout(element, initialRect, constraint, reposition);
+            correctedRect = modifier.performLayout(element, initialRect, constraint, getPosition);
         } else {
             console.assert(modifier.horizontal != null);
             console.assert(modifier.vertical != null);
-            const hr = modifier.horizontal.performLayoutHorizontal(element, initialRect, constraint, reposition);
-            const vr = modifier.vertical.performLayoutVertical(element, hr, constraint, reposition);
+            const hr = modifier.horizontal.performLayoutHorizontal(element, initialRect, constraint, getPosition);
+            const vr = modifier.vertical.performLayoutVertical(element, hr, constraint, getPosition);
             correctedRect = vr;
         }
 
@@ -66,83 +71,83 @@ export abstract class DrivenOverlayLayout extends OverlayLayout<DrivenOverlayCon
 }
 
 export abstract class VerticalCenterOverlayLayout extends DrivenOverlayLayout {
-    perfromLayoutPosition(overlay: DOMRect, target: DOMRect): OverlayLayoutPosition {
-        const x = this.getPositionHorizontal(overlay, target);
+    perfromLayoutPosition(overlay: DOMRect, target: DOMRect, gap: number): OverlayLayoutPosition {
+        const x = this.getPositionHorizontal(overlay, target, gap);
         const y = target.y + (target.height - overlay.height) / 2;
 
         return {x, y};
     }
 
-    abstract getPositionHorizontal(overlay: DOMRect, target: DOMRect): number;
+    abstract getPositionHorizontal(overlay: DOMRect, target: DOMRect, gap: number): number;
 }
 
 export abstract class HorizontalCenterOverlayLayout extends DrivenOverlayLayout {
-    perfromLayoutPosition(overlay: DOMRect, target: DOMRect): OverlayLayoutPosition {
+    perfromLayoutPosition(overlay: DOMRect, target: DOMRect, gap: number): OverlayLayoutPosition {
         const x = target.x + (target.width - overlay.width) / 2;
-        const y = this.getPositionVertical(overlay, target);
+        const y = this.getPositionVertical(overlay, target, gap);
 
         return {x, y};
     }
 
-    abstract getPositionVertical(overlay: DOMRect, target: DOMRect): number;
+    abstract getPositionVertical(overlay: DOMRect, target: DOMRect, gap: number): number;
 }
 
 export class BottomCenterOverlayLayout extends HorizontalCenterOverlayLayout {
-    getPositionVertical(_: DOMRect, target: DOMRect): number {
-        return target.bottom;
+    getPositionVertical(_: DOMRect, target: DOMRect, gap: number): number {
+        return target.bottom + gap;
     }
 }
 
 export class BottomLeftOverlayLayout extends DrivenOverlayLayout {
-    perfromLayoutPosition(overlay: DOMRect, target: DOMRect): OverlayLayoutPosition {
+    perfromLayoutPosition(overlay: DOMRect, target: DOMRect, gap: number): OverlayLayoutPosition {
         return {
             x: target.right - overlay.width,
-            y: target.bottom
+            y: target.bottom + gap
         }
     }
 }
 
 export class BottomRightOverlayLayout extends DrivenOverlayLayout {
-    perfromLayoutPosition(_: DOMRect, target: DOMRect): OverlayLayoutPosition {
+    perfromLayoutPosition(_: DOMRect, target: DOMRect, gap: number): OverlayLayoutPosition {
         return {
             x: target.left,
-            y: target.bottom
+            y: target.bottom + gap
         }
     }
 }
 
 export class TopCenterOverlayLayout extends HorizontalCenterOverlayLayout {
-    getPositionVertical(overlay: DOMRect, target: DOMRect): number {
-        return target.top - overlay.height;
+    getPositionVertical(overlay: DOMRect, target: DOMRect, gap: number): number {
+        return target.top - overlay.height - gap;
     }
 }
 
 export class TopLeftOverlayLayout extends DrivenOverlayLayout {
-    perfromLayoutPosition(overlay: DOMRect, target: DOMRect): OverlayLayoutPosition {
+    perfromLayoutPosition(overlay: DOMRect, target: DOMRect, gap: number): OverlayLayoutPosition {
         return {
             x: target.right - overlay.width,
-            y: target.y - overlay.height
+            y: target.y - overlay.height - gap
         }
     }
 }
 
 export class TopRightOverlayLayout extends DrivenOverlayLayout {
-    perfromLayoutPosition(overlay: DOMRect, target: DOMRect): OverlayLayoutPosition {
+    perfromLayoutPosition(overlay: DOMRect, target: DOMRect, gap: number): OverlayLayoutPosition {
         return {
             x: target.left,
-            y: target.top - overlay.height
+            y: target.top - overlay.height - gap
         }
     }
 }
 
 export class LeftOverlayLayout extends VerticalCenterOverlayLayout {
-    getPositionHorizontal(overlay: DOMRect, target: DOMRect): number {
-        return target.left - overlay.width;
+    getPositionHorizontal(overlay: DOMRect, target: DOMRect, gap: number): number {
+        return target.left - overlay.width - gap;
     }
 }
 
 export class RightOverlayLayout extends VerticalCenterOverlayLayout {
-    getPositionHorizontal(_: DOMRect, target: DOMRect): number {
-        return target.right;
+    getPositionHorizontal(_: DOMRect, target: DOMRect, gap: number): number {
+        return target.right + gap;
     }
 }

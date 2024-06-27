@@ -1,4 +1,3 @@
-import { OverlayAlignment } from "./overlay"
 
 export type OverlayConstraintOverflowed = {
     left: number,

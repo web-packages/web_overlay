@@ -3,18 +3,17 @@ import { Overlay, OverlayAlignment, OverlayDirection } from "../dist/index.esm.j
 const overlayTarget = document.getElementById("target");
 const overlay = document.createElement("div");
 overlay.style.display = "flex";
-overlay.style.height = "fit-content";
-overlay.style.minHeight = "0px";
+overlay.style.height = "100%";
 overlay.style.maxHeight = "max-content";
-overlay.style.margin = "10px";
 overlay.style.padding = "15px";
 overlay.style.borderRadius = "10px";
 overlay.style.backgroundColor = "red";
+overlay.style.boxSizing = "border-box"
 overlay.style.overflowY = "auto";
 
 const child = document.createElement("div");
 child.style.height = "max-content";
-child.textContent = "Overlay Content, Overlay Content, Overlay Content, Overlay Content, Overlay Content";
+child.textContent = "Overlay Content Overlay Content, Overlay Content, Overlay Content, Overlay Content";
 
 overlay.append(child);
 Overlay.attach({
@@ -22,10 +21,12 @@ Overlay.attach({
     target: overlayTarget,
     parent: overlayTarget.parentElement,
     behavior: {
+        viewportPadding: 15,
+        targetGap: 10,
         direction: OverlayDirection.BOTTOM_CENTER,
         alignment: {
             horizontal: OverlayAlignment.ALL,
-            vertical: OverlayAlignment.NONE
-        }
+            vertical: OverlayAlignment.ALL
+        },
     }
 });

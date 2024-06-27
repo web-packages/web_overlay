@@ -55,15 +55,32 @@ export class OverlayElement extends HTMLElement {
         // Calculate size and position initially and perform layout.
         this.performLayout();
 
-        // Called when this element is reflowed.
-        this.observer = new MutationObserver(this.markNeedRepaint.bind(this));
+        // Called when this element is reflowed or animation progressing.
+        if (this.target instanceof HTMLElement) {
+            this.observer = new MutationObserver(this.markNeedRepaint.bind(this));
 
-        this.observer.observe(this.firstElementChild, {
-            attributes: true,
-            characterData: true,
-            subtree: true,
-            childList: true,
-        });
+            this.observer.observe(this.target, {
+                attributes: true,
+                characterData: true,
+                subtree: true,
+                childList: true,
+            });
+
+            let markNeedRepaint = false;
+            const animationCallback = () => {
+                this.markNeedRepaint();
+                if (markNeedRepaint) {
+                    requestAnimationFrame(animationCallback);
+                }
+            }
+
+            this.target.addEventListener("animationstart", () => {
+                markNeedRepaint = true;
+                animationCallback();
+            });
+
+            this.target.addEventListener("animationend", () => markNeedRepaint = false);
+        }
 
         window.addEventListener("resize", this.markNeedRepaint.bind(this));
         window.addEventListener("scroll", this.markNeedRepaint.bind(this));

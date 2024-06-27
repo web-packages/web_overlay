@@ -113,7 +113,7 @@ export class PositionedOverlayLayoutModifier extends OverlayLayoutModifier {
             // Delegate to the parent the when right overflowed.
             if (overflowed.right) markNeedDelegateToParent = true;
         } else if (overflowed.right) {
-            rect = DOMRectUtil.merge(rect, {x: rect.x - Math.max(overflowed.right, constraint.viewport.left)});
+            rect = DOMRectUtil.merge(rect, {x: rect.x - overflowed.right});
             overflowed = constraint.overflowed(rect);
 
             // Delegate to the parent the when left overflowed.

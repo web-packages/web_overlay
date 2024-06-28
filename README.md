@@ -4,7 +4,7 @@ This package provides the foundation to implement overlay elements that take ove
 ![preview](https://github.com/MTtankkeo/web_overlay/assets/122026021/c98ea6fb-8802-4497-b3a3-a81606f04ece)
 
 ## How to add overlay to target element.
-This when you want to place an overlay element to a specific element rather than a specific static position by calling to `Overlay.attach` function.
+This when you want to attach an overlay element to a specific element rather than a specific static position by calling to `Overlay.attach` function.
 
 ### When only required properties.
 The example below define only required values to adding the overlay element to the target element.

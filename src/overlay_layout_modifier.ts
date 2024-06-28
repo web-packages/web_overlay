@@ -3,10 +3,20 @@ import { OverlayLayoutPosition } from "./overlay_layout";
 import { DOMRectUtil } from "./utils/dom_rect";
 
 export type OverlayLayoutRepositionCallback = (rect: DOMRect) => OverlayLayoutPosition;
-type RC = OverlayLayoutRepositionCallback;
+       type RC = OverlayLayoutRepositionCallback;
+
+export enum OverlaySizedOverflowBehavior {
+    NONE = "none",
+    REFLOW = "reflow",
+    REFLOW_REPOSITION = "reflow_reposition"
+}
 
 export abstract class OverlayLayoutModifier<T extends OverlayConstraint = OverlayConstraint> {
-    constructor(public parent?: OverlayLayoutModifier<T>) {}
+    protected child?: OverlayLayoutModifier;
+
+    constructor(public parent?: OverlayLayoutModifier<T>) {
+        if (parent) this.parent.child = this;
+    }
 
     performLayout(
         element: HTMLElement,
@@ -38,15 +48,34 @@ export abstract class OverlayLayoutModifier<T extends OverlayConstraint = Overla
 }
 
 export class SizedOverlayLayoutModifier extends OverlayLayoutModifier {
-    performLayoutVertical(_: HTMLElement, rect: DOMRect, constraint: OverlayConstraint): DOMRect {
-        let overflowed = constraint.overflowed(rect);
+    constructor(public overflowBehavior = OverlaySizedOverflowBehavior.NONE) {
+        super();
+    }
 
-        console.log(overflowed);
+    performLayoutVertical(element: HTMLElement, rect: DOMRect, constraint: OverlayConstraint, reposition: RC): DOMRect {
+        let overflowed = constraint.overflowed(rect);
+        let markNeedReflow = false;
+        let markNeedReposition = false;
 
         if (overflowed.bottom) {
             rect = DOMRectUtil.merge(rect, {height: Math.max(rect.height - overflowed.bottom, 0)});
-        } else if (overflowed.top) {
+            markNeedReflow = true;
+            markNeedReposition = true;
+        }
+        if (overflowed.top) {
             rect = DOMRectUtil.merge(rect, {y: rect.y + overflowed.top, height: rect.height - overflowed.top});
+            markNeedReflow = true;
+            markNeedReposition = true;
+        }
+
+        if (markNeedReflow
+         && this.overflowBehavior == OverlaySizedOverflowBehavior.REFLOW
+         || this.overflowBehavior == OverlaySizedOverflowBehavior.REFLOW_REPOSITION) {
+            rect = DOMRectUtil.reflowVertical(element, rect);
+        }
+        
+        if (markNeedReposition && this.overflowBehavior == OverlaySizedOverflowBehavior.REFLOW_REPOSITION) {
+            rect = DOMRectUtil.merge(rect, {x: reposition(rect).x});
         }
 
         return rect;
@@ -61,7 +90,6 @@ export class SizedOverlayLayoutModifier extends OverlayLayoutModifier {
             rect = DOMRectUtil.reflowHorizontal(element, rect);
             markNeedReposition = true;
         }
-
         if (overflowed.right) {
             rect = DOMRectUtil.merge(rect, {width: rect.width - overflowed.right});
             rect = DOMRectUtil.reflowHorizontal(element, rect);

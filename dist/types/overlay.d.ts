@@ -1,6 +1,6 @@
 import { OverlayElement } from "./components/overlay_element";
 import { OverlayConstraint } from "./overlay_constraint";
-import { BottomCenterOverlayLayout, BottomLeftOverlayLayout, BottomRightOverlayLayout, LeftOverlayLayout, OverlayLayout, OverlayLayoutPosition, RightOverlayLayout, TopCenterOverlayLayout, TopLeftOverlayLayout, TopRightOverlayLayout } from "./overlay_layout";
+import { BottomCenterOverlayLayout, BottomLeftOverlayLayout, BottomRightOverlayLayout, LeftOverlayLayout, OverlayLayout, OverlayLayoutPosition, OverlayLayoutResult, RightOverlayLayout, TopCenterOverlayLayout, TopLeftOverlayLayout, TopRightOverlayLayout } from "./overlay_layout";
 import { AbsoluateOverlayLayoutModifier, OverlayLayoutModifier, PositionedOverlayLayoutModifier, SizedOverlayLayoutModifier } from "./overlay_layout_modifier";
 export declare const OverlayDirection: {
     BOTTOM_CENTER: BottomCenterOverlayLayout;
@@ -22,11 +22,13 @@ export type OverlayLayoutModifierByDirection = {
     vertical: OverlayLayoutModifier;
     horizontal: OverlayLayoutModifier;
 };
+export type OverlayReflowBehindCallback = (element: HTMLElement, result: OverlayLayoutResult) => void;
 export interface OverlayBehavior<T extends OverlayConstraint = any> {
     direction: OverlayLayout<T>;
     alignment?: OverlayLayoutModifier | OverlayLayoutModifierByDirection;
     targetGap?: number;
     viewportPadding?: number;
+    onReflowBehind?: OverlayReflowBehindCallback;
 }
 export declare class Overlay {
     private static overlays;

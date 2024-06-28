@@ -17,6 +17,14 @@ export class DOMRectUtil {
         return target.getBoundingClientRect();
     }
 
+    static reflowVertical(target: HTMLElement, rect: DOMRect): DOMRect {
+        target.style.left = `${rect.left}px`;
+        target.style.top = `${rect.top}px`;
+        target.style.width = null;
+        target.style.height = `${rect.height}px`;
+        return target.getBoundingClientRect();
+    }
+
     static applyPadding(rect: DOMRect, padding: number): DOMRect {
         return new DOMRect(
             rect.x + padding,

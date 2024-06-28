@@ -1,8 +1,6 @@
 import { OverlayBehavior } from "../overlay";
 import { OverlayLayoutResult } from "../overlay_layout";
 
-export type OverlayReflowBehindBuilder = (element: HTMLElement, reflowed: OverlayLayoutResult) => HTMLElement;
-
 export class OverlayElement extends HTMLElement {
     target: HTMLElement | DOMRect;
     parent: HTMLElement;
@@ -21,9 +19,6 @@ export class OverlayElement extends HTMLElement {
     get viewportRect(): DOMRect {
         return this.parent.getBoundingClientRect();
     }
-
-    /** Called when after the layout calculation has finally been completed. */
-    reflowBehindBuilder: OverlayReflowBehindBuilder;
 
     markNeedRepaint() {
         this.unsetLayout();
@@ -98,7 +93,7 @@ export class OverlayElement extends HTMLElement {
         this.style.left = `${target.x}px`;
         this.style.top = `${target.y}px`;
 
-        this.reflowBehindBuilder?.call(this.raw, result);
+        this.behavior.onReflowBehind?.call(this.raw, result);
     }
 }
 

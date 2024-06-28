@@ -1,7 +1,7 @@
 import { OverlayElement } from "./components/overlay_element";
 import { OverlayConstraint } from "./overlay_constraint";
-import { BottomCenterOverlayLayout, BottomLeftOverlayLayout, BottomRightOverlayLayout, LeftOverlayLayout, OverlayLayout, OverlayLayoutPosition, RightOverlayLayout, TopCenterOverlayLayout, TopLeftOverlayLayout, TopRightOverlayLayout } from "./overlay_layout";
-import { AbsoluateOverlayLayoutModifier, OverlayLayoutModifier, PositionedOverlayLayoutModifier, SizedOverlayLayoutModifier } from "./overlay_layout_modifier";
+import { BottomCenterOverlayLayout, BottomLeftOverlayLayout, BottomRightOverlayLayout, LeftOverlayLayout, OverlayLayout, OverlayLayoutPosition, OverlayLayoutResult, RightOverlayLayout, TopCenterOverlayLayout, TopLeftOverlayLayout, TopRightOverlayLayout } from "./overlay_layout";
+import { AbsoluateOverlayLayoutModifier, OverlayLayoutModifier, OverlaySizedOverflowBehavior, PositionedOverlayLayoutModifier, SizedOverlayLayoutModifier } from "./overlay_layout_modifier";
 
 /** Overlay layout objects that define alignment directions are defined. */
 export const OverlayDirection = {
@@ -28,11 +28,15 @@ export type OverlayLayoutModifierByDirection = {
     horizontal: OverlayLayoutModifier
 }
 
+/** Called when after the layout calculation has finally been completed. */
+export type OverlayReflowBehindCallback = (element: HTMLElement, result: OverlayLayoutResult) => void;
+
 export interface OverlayBehavior<T extends OverlayConstraint = any> {
     direction: OverlayLayout<T>,
     alignment?: OverlayLayoutModifier | OverlayLayoutModifierByDirection,
     targetGap?: number,
     viewportPadding?: number;
+    onReflowBehind?: OverlayReflowBehindCallback;
 }
 
 export class Overlay {

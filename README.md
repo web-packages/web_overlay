@@ -1,6 +1,8 @@
 # Web Overlay
 This package provides the foundation to implement overlay elements that take overflow-considered.
 
+![preview](https://github.com/MTtankkeo/web_overlay/assets/122026021/c98ea6fb-8802-4497-b3a3-a81606f04ece)
+
 ## How to add overlay to target element.
 This when you want to place an overlay element to a specific element rather than a specific static position by calling to `Overlay.attach` function.
 

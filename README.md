@@ -1,9 +1,17 @@
 > [!WARNING]
-> When using you sould be keeping that in mind that this is package that is the alpha and dev version.
+> When using, keep in mind that this package is an alpha and development version.
 
 <div align="center">
     <img src="https://github.com/user-attachments/assets/907fd13a-994b-4ae7-b9c1-0ce68bd0e8e8">
     <h1>Web Overlay</h1>
+    <table>
+        <thead>
+          <tr>
+            <th>Version</th>
+            <th>v0.0.0-dev1</th>
+          </tr>
+        </tbody>
+    </table>
 </div>
 
 This package provides the foundation to implement overlay elements that take overflow-considered.

@@ -2,7 +2,7 @@
 > When using, keep in mind that this package is an alpha and development version.
 
 <div align="center">
-    <img src="https://github.com/user-attachments/assets/907fd13a-994b-4ae7-b9c1-0ce68bd0e8e8">
+    <img src="https://github.com/user-attachments/assets/862a6848-60ce-4ec5-8674-b3f747e5bc3d">
     <h1>Web Overlay</h1>
     <table>
         <thead>

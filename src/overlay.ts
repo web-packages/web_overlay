@@ -28,15 +28,18 @@ export type OverlayLayoutModifierByDirection = {
     horizontal: OverlayLayoutModifier
 }
 
-/** Called when after the layout calculation has finally been completed. */
-export type OverlayReflowBehindCallback = (element: HTMLElement, result: OverlayLayoutResult) => void;
+/**
+ * Signature for the function that is called when after the layout
+ * calculation has finally been completed.
+ */
+export type OverlayLayoutBehindCallback = (element: HTMLElement, result: OverlayLayoutResult) => void;
 
 export interface OverlayBehavior<T extends OverlayConstraint = any> {
     direction: OverlayLayout<T>,
     alignment?: OverlayLayoutModifier | OverlayLayoutModifierByDirection,
     targetGap?: number,
     viewportPadding?: number;
-    onReflowBehind?: OverlayReflowBehindCallback;
+    onLayoutBehind?: OverlayLayoutBehindCallback;
 }
 
 export class Overlay {
@@ -63,10 +66,6 @@ export class Overlay {
         parent.append(wrapper);
 
         return wrapper;
-    }
-
-    static detach(element: HTMLElement) {
-        console.log(this.overlays.get(element));
     }
 
     static at({element, parent, behavior, position}: {

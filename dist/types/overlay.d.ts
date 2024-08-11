@@ -22,13 +22,13 @@ export type OverlayLayoutModifierByDirection = {
     vertical: OverlayLayoutModifier;
     horizontal: OverlayLayoutModifier;
 };
-export type OverlayReflowBehindCallback = (element: HTMLElement, result: OverlayLayoutResult) => void;
+export type OverlayLayoutBehindCallback = (element: HTMLElement, result: OverlayLayoutResult) => void;
 export interface OverlayBehavior<T extends OverlayConstraint = any> {
     direction: OverlayLayout<T>;
     alignment?: OverlayLayoutModifier | OverlayLayoutModifierByDirection;
     targetGap?: number;
     viewportPadding?: number;
-    onReflowBehind?: OverlayReflowBehindCallback;
+    onLayoutBehind?: OverlayLayoutBehindCallback;
 }
 export declare class Overlay {
     private static overlays;
@@ -39,7 +39,6 @@ export declare class Overlay {
         parent: HTMLElement;
         behavior: OverlayBehavior;
     }): OverlayElement;
-    static detach(element: HTMLElement): void;
     static at({ element, parent, behavior, position }: {
         element: HTMLElement;
         parent: HTMLElement;

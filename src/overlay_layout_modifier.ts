@@ -2,8 +2,11 @@ import { DrivenOverlayConstraint, OverlayConstraint } from "./overlay_constraint
 import { OverlayLayoutPosition } from "./overlay_layout";
 import { DOMRectUtil } from "./utils/dom_rect";
 
-export type OverlayLayoutRepositionCallback = (rect: DOMRect) => OverlayLayoutPosition;
-       type RC = OverlayLayoutRepositionCallback;
+/**
+ * Signature for the function that is notifying to OverlayLayout when an overlay layout reposition.
+ * Used by `OverlayLayoutModifier`.
+ */
+export type OverlayRepositionCallback = (rect: DOMRect) => OverlayLayoutPosition;
 
 export enum OverlaySizedOverflowBehavior {
     NONE = "none",
@@ -22,11 +25,10 @@ export abstract class OverlayLayoutModifier<T extends OverlayConstraint = Overla
         element: HTMLElement,
         current: DOMRect,
         constraint: T,
-        reposition: RC
+        reposition: OverlayRepositionCallback
     ): DOMRect {
-        // Generally, height is calculated according to width,
-        // so the overflow degree in the horizontal direction
-        // is calculated and reflowed first.
+        // Generally, height is calculated according to width, so the overflow
+        // degree in the horizontal direction is calculated and reflowed first.
         const horizontal = this.performLayoutHorizontal(element, current, constraint, reposition);
 
         return this.performLayoutVertical(element, horizontal, constraint, reposition);
@@ -36,14 +38,14 @@ export abstract class OverlayLayoutModifier<T extends OverlayConstraint = Overla
         element: HTMLElement,
         current: DOMRect,
         constraint: T,
-        reposition: RC
+        reposition: OverlayRepositionCallback
     ): DOMRect;
 
     abstract performLayoutHorizontal(
         element: HTMLElement,
         current: DOMRect,
         constraint: T,
-        reposition: RC
+        reposition: OverlayRepositionCallback
     ): DOMRect;
 }
 
@@ -52,7 +54,12 @@ export class SizedOverlayLayoutModifier extends OverlayLayoutModifier {
         super();
     }
 
-    performLayoutVertical(element: HTMLElement, rect: DOMRect, constraint: OverlayConstraint, reposition: RC): DOMRect {
+    performLayoutVertical(
+        element: HTMLElement,
+        rect: DOMRect,
+        constraint: OverlayConstraint,
+        reposition: OverlayRepositionCallback
+    ): DOMRect {
         let overflowed = constraint.overflowed(rect);
         let markNeedReflow = false;
         let markNeedReposition = false;
@@ -73,7 +80,7 @@ export class SizedOverlayLayoutModifier extends OverlayLayoutModifier {
          || this.overflowBehavior == OverlaySizedOverflowBehavior.REFLOW_REPOSITION) {
             rect = DOMRectUtil.reflowVertical(element, rect);
         }
-        
+
         if (markNeedReposition && this.overflowBehavior == OverlaySizedOverflowBehavior.REFLOW_REPOSITION) {
             rect = DOMRectUtil.merge(rect, {x: reposition(rect).x});
         }
@@ -81,7 +88,13 @@ export class SizedOverlayLayoutModifier extends OverlayLayoutModifier {
         return rect;
     }
 
-    performLayoutHorizontal(element: HTMLElement, rect: DOMRect, constraint: OverlayConstraint, reposition: RC): DOMRect {
+    performLayoutHorizontal(
+        element: HTMLElement,
+        rect: DOMRect,
+        constraint:
+        OverlayConstraint,
+        reposition: OverlayRepositionCallback
+    ): DOMRect {
         let overflowed = constraint.overflowed(rect);
         let markNeedReposition = false;
 
@@ -105,7 +118,12 @@ export class SizedOverlayLayoutModifier extends OverlayLayoutModifier {
 }
 
 export class PositionedOverlayLayoutModifier extends OverlayLayoutModifier {
-    performLayoutVertical(_: HTMLElement, rect: DOMRect, constraint: OverlayConstraint, reposition: RC): DOMRect {
+    performLayoutVertical(
+        _: HTMLElement,
+        rect: DOMRect,
+        constraint: OverlayConstraint,
+        reposition: OverlayRepositionCallback
+    ): DOMRect {
         let overflowed = constraint.overflowed(rect);
         let markNeedDelegateToParent = false;
 
@@ -130,7 +148,12 @@ export class PositionedOverlayLayoutModifier extends OverlayLayoutModifier {
         return rect;
     }
 
-    performLayoutHorizontal(_: HTMLElement, rect: DOMRect, constraint: DrivenOverlayConstraint, reposition: RC): DOMRect {
+    performLayoutHorizontal(
+        _: HTMLElement,
+        rect: DOMRect,
+        constraint: DrivenOverlayConstraint,
+        reposition: OverlayRepositionCallback
+    ): DOMRect {
         let overflowed = constraint.overflowed(rect);
         let markNeedDelegateToParent = false;
 

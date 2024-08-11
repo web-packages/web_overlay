@@ -1,5 +1,4 @@
 import { OverlayBehavior } from "../overlay";
-import { OverlayLayoutResult } from "../overlay_layout";
 
 export class OverlayElement extends HTMLElement {
     target: HTMLElement | DOMRect;
@@ -86,14 +85,14 @@ export class OverlayElement extends HTMLElement {
     performLayout() {
         const layout = this.behavior.direction;
         const result = layout.performLayout(this); 
-        const target = result.correctedRect;
+        const target = result.modifiedRect;
 
         this.style.width = `${target.width}px`;
         this.style.height = `${target.height}px`;
         this.style.left = `${target.x}px`;
         this.style.top = `${target.y}px`;
 
-        this.behavior.onReflowBehind?.call(this.raw, result);
+        this.behavior.onLayoutBehind?.call(this.raw, result);
     }
 }
 

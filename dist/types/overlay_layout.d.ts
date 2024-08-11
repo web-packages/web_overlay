@@ -6,7 +6,7 @@ export type OverlayLayoutPosition = {
 };
 export type OverlayLayoutResult = {
     initialRect: DOMRect;
-    correctedRect: DOMRect;
+    modifiedRect: DOMRect;
 };
 export declare abstract class OverlayLayout<T extends OverlayConstraint> {
     abstract performLayout(element: OverlayElement): OverlayLayoutResult;

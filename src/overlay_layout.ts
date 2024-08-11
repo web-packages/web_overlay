@@ -1,14 +1,16 @@
 import { OverlayElement } from "./components/overlay_element";
-import { OverlayAlignment, OverlayBehavior } from "./overlay";
+import { OverlayAlignment } from "./overlay";
 import { DrivenOverlayConstraint, OverlayConstraint } from "./overlay_constraint";
 import { OverlayLayoutModifier } from "./overlay_layout_modifier";
 import { DOMRectUtil } from "./utils/dom_rect";
 
+/** Signature for the object that is defining the position(x, y) about an overlay layout. */
 export type OverlayLayoutPosition = { x: number; y: number; };
 
+/** Signature for the object that is defining the result about an overlay layout. */
 export type OverlayLayoutResult = {
     initialRect: DOMRect,
-    correctedRect: DOMRect
+    modifiedRect: DOMRect
 };
 
 export abstract class OverlayLayout<T extends OverlayConstraint> {
@@ -22,7 +24,11 @@ export abstract class OverlayLayout<T extends OverlayConstraint> {
      * Static position where the overlay element should be located
      * without overflow consideration.
      */
-    abstract perfromLayoutPosition(overlay: DOMRect, target: DOMRect, gap: number): OverlayLayoutPosition;
+    abstract perfromLayoutPosition(
+        overlay: DOMRect,
+        target: DOMRect,
+        gap: number
+    ): OverlayLayoutPosition;
 
     /** Returns the overlay constraint instance that is created. */
     abstract createOverlayConstraint(viewport: DOMRect): T;
@@ -51,21 +57,21 @@ export abstract class DrivenOverlayLayout extends OverlayLayout<DrivenOverlayCon
             DOMRectUtil.applyPadding(viewport, viewportPadding)
         );
         
-        let correctedRect = initialRect;
+        let modifiedRect = initialRect;
 
         if (modifier instanceof OverlayLayoutModifier) {
-            correctedRect = modifier.performLayout(element, initialRect, constraint, getPosition);
+            modifiedRect = modifier.performLayout(element, initialRect, constraint, getPosition);
         } else {
             console.assert(modifier.horizontal != null);
             console.assert(modifier.vertical != null);
             const hr = modifier.horizontal.performLayoutHorizontal(element, initialRect, constraint, getPosition);
             const vr = modifier.vertical.performLayoutVertical(element, hr, constraint, getPosition);
-            correctedRect = vr;
+            modifiedRect = vr;
         }
 
         return {
             initialRect: initialRect,
-            correctedRect: correctedRect
+            modifiedRect: modifiedRect
         }
     }
 }

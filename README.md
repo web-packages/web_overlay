@@ -1,6 +1,22 @@
-# Web Overlay
+> [!WARNING]
+> When using, keep in mind that this package is an alpha and development version.
+
+<div align="center">
+    <img src="https://github.com/user-attachments/assets/862a6848-60ce-4ec5-8674-b3f747e5bc3d">
+    <h1>Web Overlay</h1>
+    <table>
+        <thead>
+          <tr>
+            <th>Version</th>
+            <th>v0.0.0-dev1</th>
+          </tr>
+        </tbody>
+    </table>
+</div>
+
 This package provides the foundation to implement overlay elements that take overflow-considered.
 
+## Preview
 ![preview](https://github.com/MTtankkeo/web_overlay/assets/122026021/c98ea6fb-8802-4497-b3a3-a81606f04ece)
 
 ## How to add overlay to target element.

@@ -59,7 +59,7 @@ Overlay.attach({
 });
 ```
 
-# The Properties of OverlayDirection
+## The Properties of OverlayDirection
 This constants values that defines overlay layout objects that defines alignment directions of an overlay element.
 
 ```ts
@@ -75,7 +75,7 @@ export const OverlayDirection = {
 }
 ```
 
-# The Properties of OverlayAlignment
+## The Properties of OverlayAlignment
 Signature for the types about the overlay alignment behavior.
 
 ```ts
@@ -87,7 +87,7 @@ export const OverlayAlignment = {
 }
 ```
 
-# The Properties of OverlayBehavior\<T\>
+## The Properties of OverlayBehavior\<T\>
 Signature for the interface that defines overlay behaviors about measure position of an overlay element and post-processing or other tasks.
 
 | Name | Description | Type |

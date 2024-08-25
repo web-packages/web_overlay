@@ -1,9 +1,12 @@
 import { OverlayElement } from "./components/overlay_element";
 import { OverlayConstraint } from "./overlay_constraint";
 import { BottomCenterOverlayLayout, BottomLeftOverlayLayout, BottomRightOverlayLayout, LeftOverlayLayout, OverlayLayout, OverlayLayoutPosition, OverlayLayoutResult, RightOverlayLayout, TopCenterOverlayLayout, TopLeftOverlayLayout, TopRightOverlayLayout } from "./overlay_layout";
-import { AbsoluateOverlayLayoutModifier, OverlayLayoutModifier, OverlaySizedOverflowBehavior, PositionedOverlayLayoutModifier, SizedOverlayLayoutModifier } from "./overlay_layout_modifier";
+import { AbsoluateOverlayLayoutModifier, OverlayLayoutModifier, PositionedOverlayLayoutModifier, SizedOverlayLayoutModifier } from "./overlay_layout_modifier";
 
-/** Overlay layout objects that define alignment directions are defined. */
+/**
+ * This constants values that defines overlay layout objects that defines
+ * alignment directions of an overlay element.
+ */
 export const OverlayDirection = {
     BOTTOM_CENTER: new BottomCenterOverlayLayout(),
     BOTTOM_RIGHT: new BottomRightOverlayLayout(),
@@ -15,7 +18,7 @@ export const OverlayDirection = {
     RIGHT: new RightOverlayLayout()
 }
 
-/** Signature for types about the overlay alignment behavior. */
+/** Signature for the types about the overlay alignment behavior. */
 export const OverlayAlignment = {
     ALL: new PositionedOverlayLayoutModifier(new SizedOverlayLayoutModifier()),
     NONE: new AbsoluateOverlayLayoutModifier(),
@@ -23,6 +26,7 @@ export const OverlayAlignment = {
     POSITION: new PositionedOverlayLayoutModifier()
 }
 
+/** Signature for the type that defines a modifier for overlay elements by direction. */
 export type OverlayLayoutModifierByDirection = {
     vertical: OverlayLayoutModifier,
     horizontal: OverlayLayoutModifier
@@ -34,6 +38,10 @@ export type OverlayLayoutModifierByDirection = {
  */
 export type OverlayLayoutBehindCallback = (element: HTMLElement, result: OverlayLayoutResult) => void;
 
+/**
+ * Signature for the interface that defines overlay behaviors about
+ * measure position of an overlay element and post-processing or other tasks.
+ */
 export interface OverlayBehavior<T extends OverlayConstraint = any> {
     direction: OverlayLayout<T>,
     alignment?: OverlayLayoutModifier | OverlayLayoutModifierByDirection,

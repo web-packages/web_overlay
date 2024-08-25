@@ -1,4 +1,10 @@
 
+/**
+ * Signature for the interface that defines the overflowed pixel values
+ * based on the direction of an overlay element.
+ *
+ * Used by [OverlayConstraint].
+ */
 export type OverlayConstraintOverflowed = {
     left: number,
     right: number,
@@ -6,6 +12,12 @@ export type OverlayConstraintOverflowed = {
     bottom: number
 }
 
+/**
+ * This class provides the function about calculating the degree
+ * to which an overlay element overflows.
+ * 
+ * Used by [OverlayLayout], [OverlayLayoutModifier]. 
+ */
 export abstract class OverlayConstraint {
     constructor(public viewport: DOMRect) {}
 

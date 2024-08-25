@@ -3,8 +3,10 @@ import { OverlayLayoutPosition } from "./overlay_layout";
 import { DOMRectUtil } from "./utils/dom_rect";
 
 /**
- * Signature for the function that is notifying to OverlayLayout when an overlay layout reposition.
- * Used by `OverlayLayoutModifier`.
+ * Signature for the function that notifies to OverlayLayout when
+ * an overlay layout repositioned.
+ * 
+ * Used by [OverlayLayoutModifier].
  */
 export type OverlayRepositionCallback = (rect: DOMRect) => OverlayLayoutPosition;
 

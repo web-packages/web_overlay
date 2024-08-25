@@ -5,13 +5,16 @@
         <thead>
           <tr>
             <th>Version</th>
-            <th>v1.0.0-alpha1</th>
+            <th>v1.0.0-alpha2</th>
           </tr>
         </tbody>
     </table>
 </div>
 
 This package provides the foundation to implement overlay elements that take overflow-considered.
+
+> __See Also:__<br>
+> And..., this package provides offers a comprehensive solution for managing content that extends beyond the boundaries of its container, ensuring seamless integration and optimal user experience across various display contexts.
 
 ## Preview
 ![preview](https://github.com/MTtankkeo/web_overlay/assets/122026021/c98ea6fb-8802-4497-b3a3-a81606f04ece)
@@ -55,3 +58,42 @@ Overlay.attach({
     }
 });
 ```
+
+# The Properties of OverlayDirection
+This constants values that defines overlay layout objects that defines alignment directions of an overlay element.
+
+```ts
+export const OverlayDirection = {
+    BOTTOM_CENTER: new BottomCenterOverlayLayout(),
+    BOTTOM_RIGHT: new BottomRightOverlayLayout(),
+    BOTTOM_LEFT: new BottomLeftOverlayLayout(),
+    TOP_CENTER: new TopCenterOverlayLayout(),
+    TOP_RIGHT: new TopRightOverlayLayout(),
+    TOP_LEFT: new TopLeftOverlayLayout(),
+    LEFT: new LeftOverlayLayout(),
+    RIGHT: new RightOverlayLayout()
+}
+```
+
+# The Properties of OverlayAlignment
+Signature for the types about the overlay alignment behavior.
+
+```ts
+export const OverlayAlignment = {
+    ALL: new PositionedOverlayLayoutModifier(new SizedOverlayLayoutModifier()),
+    NONE: new AbsoluateOverlayLayoutModifier(),
+    SIZE: new SizedOverlayLayoutModifier(),
+    POSITION: new PositionedOverlayLayoutModifier()
+}
+```
+
+# The Properties of OverlayBehavior\<T\>
+Signature for the interface that defines overlay behaviors about measure position of an overlay element and post-processing or other tasks.
+
+| Name | Description | Type |
+| ---- | ----------- | ---- |
+| direction | Not ready a comment about this. | OverlayLayout<T>
+| alignment? | Not ready a comment about this. | OverlayLayoutModifier \| OverlayLayoutModifierByDirection
+| targetGap? | Not ready a comment about this. | number
+| viewportPadding? | Not ready a comment about this. | number
+| onLayoutBehind? | Not ready a comment about this. | OverlayLayoutBehindCallback

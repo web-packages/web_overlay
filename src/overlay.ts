@@ -43,9 +43,9 @@ export type OverlayLayoutBehindCallback = (element: HTMLElement, result: Overlay
  * measure position of an overlay element and post-processing or other tasks.
  */
 export interface OverlayBehavior<T extends OverlayConstraint = any> {
-    direction: OverlayLayout<T>,
-    alignment?: OverlayLayoutModifier | OverlayLayoutModifierByDirection,
-    targetGap?: number,
+    direction: OverlayLayout<T>;
+    alignment?: OverlayLayoutModifier | OverlayLayoutModifierByDirection;
+    targetGap?: number;
     viewportPadding?: number;
     onLayoutBehind?: OverlayLayoutBehindCallback;
 }

@@ -21,6 +21,7 @@ export type OverlayConstraintOverflowed = {
 export abstract class OverlayConstraint {
     constructor(public viewport: DOMRect) {}
 
+    /** Returns a given dom-rect of pixels that have overflowed the viewport. */
     abstract overflowed(rect: DOMRect): OverlayConstraintOverflowed;
 }
 

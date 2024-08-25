@@ -10,12 +10,20 @@ import { DOMRectUtil } from "./utils/dom_rect";
  */
 export type OverlayRepositionCallback = (rect: DOMRect) => OverlayLayoutPosition;
 
+/**
+ * Signature for the values that defines a behavior of post-processing
+ * about [SizedOverlayLayoutModifier].
+ */
 export enum OverlaySizedOverflowBehavior {
     NONE = "none",
     REFLOW = "reflow",
     REFLOW_REPOSITION = "reflow_reposition"
 }
 
+/**
+ * This class that defines about post-processing behavior of an overlay element.
+ * See Also, Used to correct overflows of an overlay element.
+ */
 export abstract class OverlayLayoutModifier<T extends OverlayConstraint = OverlayConstraint> {
     protected child?: OverlayLayoutModifier;
 

@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="https://github.com/user-attachments/assets/4e6dcf5e-3d2d-4bc7-9125-58963b52bf42">
+    <img src="https://github.com/user-attachments/assets/ae6c1d98-5754-4c2e-9c4f-685a7d45000e">
     <h1>Web Overlay Layout</h1>
     <table>
         <thead>

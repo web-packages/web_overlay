@@ -16,7 +16,8 @@ child.style.height = "max-content";
 child.textContent = "Overlay Content Overlay Content, Overlay Content, Overlay Content, Overlay Content";
 
 overlay.append(child);
-Overlay.attach({
+
+const instance = Overlay.attach({
     element: overlay,
     target: overlayTarget,
     parent: overlayTarget.parentElement,
@@ -24,6 +25,10 @@ Overlay.attach({
         viewportPadding: 15,
         targetGap: 10,
         direction: OverlayDirection.BOTTOM_CENTER,
+        animation: {
+            fadein: "fade-in 0.3s",
+            fadeout: "fade-out 0.3s"
+        },
         alignment: {
             horizontal: OverlayAlignment.ALL,
             vertical: OverlayAlignment.ALL

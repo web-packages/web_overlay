@@ -27,9 +27,26 @@ export const OverlayAlignment = {
 }
 
 /** Signature for the type that defines a modifier for overlay elements by direction. */
-export type OverlayLayoutModifierByDirection = {
-    vertical: OverlayLayoutModifier,
-    horizontal: OverlayLayoutModifier
+export interface OverlayLayoutModifierByDirection {
+    vertical: OverlayLayoutModifier;
+    horizontal: OverlayLayoutModifier;
+}
+
+/**
+ * Signature for the type that defines a fade-in and fade-out animation
+ * (that keyframes of CSS) option values about an overlay element.
+ * 
+ * A simple exmaple that defines about it:
+ * ```ts
+ * animation: {
+ *   fadein: "overlay-fade-in 1s",
+ *   fadeout: "overlay-fade-out 1s",
+ * }
+ * ```
+ */
+export interface OverlayAnimation {
+    fadein?: string;
+    fadeout?: string;
 }
 
 /**
@@ -53,6 +70,11 @@ export interface OverlayBehavior<T extends OverlayConstraint = any> {
      * when an overlay element overflows the viewport.
      */
     alignment?: OverlayLayoutModifier | OverlayLayoutModifierByDirection;
+    /**
+     * The property that defines a CSS Keyframes for an overlay element
+     * about fade-in and fade-out animation.
+     */
+    animation?: OverlayAnimation,
     /**
      * The pixel value for how far the overlay element should be
      * relative to the particular element(target) that should be placed.
@@ -120,7 +142,7 @@ export class Overlay {
         if (target == null) throw new Error("todo");
         if (parent == null) throw new Error("todo");
 
-        const wrapper = document.createElement("overlay-wrapper") as OverlayElement;
+        const wrapper = document.createElement("overlay-layout") as OverlayElement;
         wrapper.append(element);
         wrapper.target = target;
         wrapper.parent = parent;
@@ -130,6 +152,11 @@ export class Overlay {
         parent.append(wrapper);
 
         return wrapper;
+    }
+
+    /** Detaches a given overlay element into connected DOM. */
+    static detach(element: OverlayElement, callback: VoidFunction) {
+        element.detach(callback);
     }
 
     /**
@@ -153,7 +180,7 @@ export class Overlay {
         behavior: OverlayBehavior,
         position: OverlayLayoutPosition,
     }) {
-        const wrapper = document.createElement("overlay-wrapper") as OverlayElement;
+        const wrapper = document.createElement("overlay-layout") as OverlayElement;
         wrapper.append(element);
         wrapper.target = new DOMRect(position.x, position.y);
         wrapper.parent = parent ?? document.body;

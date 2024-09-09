@@ -5,7 +5,7 @@
         <thead>
           <tr>
             <th>Version</th>
-            <th>v1.0.0-bata1</th>
+            <th>v1.0.0-bata2</th>
           </tr>
         </tbody>
     </table>
@@ -14,8 +14,10 @@
 # Introduction
 This package provides the foundation to implement overlay elements that take overflow-considered.
 
-> __See Also:__<br>
-> And..., this package provides offers a comprehensive solution for managing content that extends beyond the boundaries of its container, ensuring seamless integration and optimal user experience across various display contexts.
+> See Also, If you want the change-log by version for this package. refer to [Change Log](CHANGELOG.md) for details.
+
+> __Details__<br>
+> This package provides offers a comprehensive solution for managing content that extends beyond the boundaries of its container, ensuring seamless integration and optimal user experience across various display contexts.
 
 ## Preview
 ![preview](https://github.com/MTtankkeo/web_overlay/assets/122026021/c98ea6fb-8802-4497-b3a3-a81606f04ece)
@@ -47,6 +49,7 @@ Overlay.attach({
         viewportPadding: 15,
         targetGap: 10,
         direction: OverlayDirection.BOTTOM_CENTER,
+        animation: ...,
 
         // Define how to correct overflowed.
         alignment: OverlayAlignment.ALL,

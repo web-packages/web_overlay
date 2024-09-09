@@ -1,4 +1,4 @@
-import { OverlayBehavior } from "../overlay";
+import { OverlayAnimation, OverlayBehavior } from "../overlay";
 
 export class OverlayElement extends HTMLElement {
     target: HTMLElement | DOMRect;
@@ -17,6 +17,10 @@ export class OverlayElement extends HTMLElement {
 
     get viewportRect(): DOMRect {
         return this.parent.getBoundingClientRect();
+    }
+
+    get animation(): OverlayAnimation {
+        return this.behavior.animation;
     }
 
     markNeedRepaint() {
@@ -80,6 +84,28 @@ export class OverlayElement extends HTMLElement {
 
         window.addEventListener("resize", this.markNeedRepaint.bind(this));
         window.addEventListener("scroll", this.markNeedRepaint.bind(this));
+
+        if (this.animation?.fadein) {
+            queueMicrotask(() => this.fadein());
+        }
+    }
+    
+    detach(callback?: VoidFunction) {
+        if (this.animation?.fadeout) {
+            this.fadeout();
+            this.onanimationend = () => this.parent.removeChild(this), callback && callback();
+            return;
+        }
+
+        this.parent.removeChild(this);
+    }
+
+    fadein() {
+        this.style.animation = this.animation.fadein;
+    }
+
+    fadeout() {
+        this.style.animation = this.animation.fadeout;
     }
 
     performLayout() {
@@ -96,4 +122,4 @@ export class OverlayElement extends HTMLElement {
     }
 }
 
-customElements.define("overlay-wrapper", OverlayElement);
+customElements.define("overlay-layout", OverlayElement);

@@ -4,7 +4,7 @@ export class OverlayElement extends HTMLElement {
     target: HTMLElement | DOMRect;
     parent: HTMLElement;
     behavior: OverlayBehavior;
-    observer: MutationObserver;
+    isMarkNeedRepaint: boolean = true;
 
     /** The target element wrapped by this overlay wrapper. */
     get raw() {
@@ -37,7 +37,7 @@ export class OverlayElement extends HTMLElement {
     }
 
     disconnectedCallback() {
-        this.observer.disconnect();
+        this.isMarkNeedRepaint = false;
         window.removeEventListener("resize", this.markNeedRepaint.bind(this));
         window.removeEventListener("scroll", this.markNeedRepaint.bind(this));
     }
@@ -53,33 +53,17 @@ export class OverlayElement extends HTMLElement {
         // Calculate size and position initially and perform layout.
         this.performLayout();
 
-        // Called when this element is reflowed or animation progressing.
+        // Currently, web standard APIs have limitations in detecting if the target element has moved.
+        // As an alternative, we go through the layout stage on every frame to handle this.
         if (this.target instanceof HTMLElement) {
-            this.observer = new MutationObserver(this.markNeedRepaint.bind(this));
-            this.observer.observe(this.target, {
-                attributes: true,
-                characterData: true,
-                subtree: true,
-                childList: true,
-            });
-
-            let markNeedRepaint = false;
-            const startAnimationCallback = () => {
-                markNeedRepaint = true;
-                checkAnimationCallback();
-            } 
-
             const checkAnimationCallback = () => {
-                this.markNeedRepaint();
-                if (markNeedRepaint) {
+                if (this.isMarkNeedRepaint) {
+                    this.markNeedRepaint();
                     requestAnimationFrame(checkAnimationCallback);
                 }
             }
 
-            this.target.addEventListener("animationstart", startAnimationCallback);
-            this.target.addEventListener("animationend", () => markNeedRepaint = false);
-            this.target.addEventListener("transitionstart", startAnimationCallback);
-            this.target.addEventListener("transitionend", () => markNeedRepaint = false);
+            requestAnimationFrame(checkAnimationCallback);
         }
 
         window.addEventListener("resize", this.markNeedRepaint.bind(this));

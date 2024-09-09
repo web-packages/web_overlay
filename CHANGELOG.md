@@ -9,3 +9,6 @@
 
 # 1.0.0-beta2
 - Added the related feature and interface to allow easy implementation of fade-in and fade-out animation effects.
+
+# 1.0.0-beta3
+- Fixed an issue where detecting element movement was limited by web standard APIs; now processes the layout stage on every frame as a workaround.

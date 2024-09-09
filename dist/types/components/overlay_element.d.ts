@@ -3,7 +3,7 @@ export declare class OverlayElement extends HTMLElement {
     target: HTMLElement | DOMRect;
     parent: HTMLElement;
     behavior: OverlayBehavior;
-    observer: MutationObserver;
+    isMarkNeedRepaint: boolean;
     get raw(): HTMLElement;
     get targetRect(): DOMRect;
     get viewportRect(): DOMRect;

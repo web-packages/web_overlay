@@ -5,7 +5,7 @@
         <thead>
           <tr>
             <th>Version</th>
-            <th>v1.0.0-bata2</th>
+            <th>v1.0.0-beta2</th>
           </tr>
         </tbody>
     </table>
@@ -98,6 +98,7 @@ Signature for the interface that defines overlay behaviors about measure positio
 | ---- | ----------- | ---- |
 | direction | The property that defines an instance that defines where the overlay element is placed in the viewport. | OverlayLayout<T>
 | alignment? | The property that defines an instance for post-processing when an overlay element overflows the viewport. | OverlayLayoutModifier \| OverlayLayoutModifierByDirection
+| animation? | The property that defines a CSS Keyframes for an overlay element about fade-in and fade-out animation. | OverlayAnimation
 | targetGap? | The pixel value for how far the overlay element should be relative to the particular element(target) that should be placed. | number
 | viewportPadding? | The pixel value representing the padding around the viewport to ensure that the overlay element does not overlap the edges of the viewport or to provide additional spacing. | number
 | onLayoutBehind? | The callback function that is invoked after the layout calculation has been completed. And this function receives the overlay element and the final layout result, allowing for additional processing or adjustments once the layout has been finalized. | OverlayLayoutBehindCallback

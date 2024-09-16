@@ -5,7 +5,7 @@
         <thead>
           <tr>
             <th>Version</th>
-            <th>v1.0.0-beta3</th>
+            <th>v1.0.0</th>
           </tr>
         </tbody>
     </table>
@@ -49,7 +49,7 @@ Overlay.attach({
         viewportPadding: 15,
         targetGap: 10,
         direction: OverlayDirection.BOTTOM_CENTER,
-        animation: ...,
+        animation: {...},
 
         // Define how to correct overflowed.
         alignment: OverlayAlignment.ALL,

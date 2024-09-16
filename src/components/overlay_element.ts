@@ -12,7 +12,9 @@ export class OverlayElement extends HTMLElement {
     }
 
     get targetRect(): DOMRect {
-        return this.target instanceof HTMLElement ? this.target.getBoundingClientRect() : this.target;
+        return this.target instanceof HTMLElement
+             ? this.target.getBoundingClientRect()
+             : this.target;
     }
 
     get viewportRect(): DOMRect {
@@ -93,6 +95,15 @@ export class OverlayElement extends HTMLElement {
     }
 
     performLayout() {
+        if (this.target instanceof HTMLElement) {
+            const style = getComputedStyle(this.target);
+
+            // When the target element is determined to be absent from the DOM or not rendered,
+            // the overlay element is removed from the document main DOM.
+            if (style.display == "none"
+             || style.display == "contents") this.remove();
+        }
+
         const layout = this.behavior.direction;
         const result = layout.performLayout(this); 
         const target = result.modifiedRect;

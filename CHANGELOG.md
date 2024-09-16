@@ -12,3 +12,6 @@
 
 # 1.0.0-beta3
 - Fixed an issue where detecting element movement was limited by web standard APIs; now processes the layout stage on every frame as a workaround.
+
+# 1.0.0
+- Fixed an issue where an overlay element was not being removed from a document main DOM when the target element was determined to be absent or not rendered.

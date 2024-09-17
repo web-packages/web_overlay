@@ -52,6 +52,8 @@ export class OverlayElement extends HTMLElement {
         this.style.width = "max-content";
         this.style.height = "max-content";
 
+        console.log("sdfdsfdsfsdfs");
+
         // Calculate size and position initially and perform layout.
         this.performLayout();
 
@@ -73,6 +75,10 @@ export class OverlayElement extends HTMLElement {
 
         if (this.animation?.fadein) {
             queueMicrotask(() => this.fadein());
+        }
+
+        this.onanimationend = () => {
+            this.style.animation = null;
         }
     }
     
@@ -97,17 +103,26 @@ export class OverlayElement extends HTMLElement {
     performLayout() {
         if (this.target instanceof HTMLElement) {
             let element = this.target;
+            this.target.isConnected
 
+            // When a target element is determined to be absent from the DOM or not rendered,
+            // an overlay element is no rendered or removed from the document main DOM.
             while (element) {
                 const style = getComputedStyle(element);
 
-                // When the target element is determined to be absent from the DOM or not rendered,
-                // the overlay element is removed from the document main DOM.
+                if (!element.isConnected) {
+                    this.remove();
+                }
+
                 if (style.display == "none"
-                 || style.display == "contents") return this.remove();
+                 || style.display == "contents") return this.style.display = "none";
 
                 element = element.parentElement;
             }
+        }
+
+        if (this.style.display == "none") {
+            this.style.display = "block";
         }
 
         const layout = this.behavior.direction;

@@ -17,4 +17,5 @@
 - Fixed an issue where an overlay element was not being removed from a document main DOM when the target element was determined to be absent or not rendered.
 
 # 1.0.10
-- Fixed an issue where the rendering status of the overlay target element was not accurately determined by checking only its own style.
+- Fixed an issue where the rendering status of an overlay target element was not accurately determined by checking only its own style.
+- Fixed an issue where an overlay would not remain in the DOM when the target element was not rendered but still present in the DOM.

@@ -15,5 +15,5 @@ export declare class OverlayElement extends HTMLElement {
     detach(callback?: VoidFunction): void;
     fadein(): void;
     fadeout(): void;
-    performLayout(): void;
+    performLayout(): string;
 }

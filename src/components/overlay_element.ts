@@ -52,8 +52,6 @@ export class OverlayElement extends HTMLElement {
         this.style.width = "max-content";
         this.style.height = "max-content";
 
-        console.log("sdfdsfdsfsdfs");
-
         // Calculate size and position initially and perform layout.
         this.performLayout();
 
@@ -77,9 +75,7 @@ export class OverlayElement extends HTMLElement {
             queueMicrotask(() => this.fadein());
         }
 
-        this.onanimationend = () => {
-            this.style.animation = null;
-        }
+        this.onanimationend = () => this.style.animation = null;
     }
     
     detach(callback?: VoidFunction) {

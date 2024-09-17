@@ -77,7 +77,7 @@ export class OverlayElement extends HTMLElement {
 
         this.onanimationend = () => this.style.animation = null;
     }
-    
+
     detach(callback?: VoidFunction) {
         if (this.animation?.fadeout) {
             this.fadeout();
@@ -97,18 +97,17 @@ export class OverlayElement extends HTMLElement {
     }
 
     performLayout() {
+        // When a target element is determined to be absent from the DOM or not rendered,
+        // an overlay element is no rendered or removed from the document main DOM.
         if (this.target instanceof HTMLElement) {
             let element = this.target;
-            this.target.isConnected
 
-            // When a target element is determined to be absent from the DOM or not rendered,
-            // an overlay element is no rendered or removed from the document main DOM.
+            if (!element.isConnected) {
+                this.remove();
+            }
+
             while (element) {
                 const style = getComputedStyle(element);
-
-                if (!element.isConnected) {
-                    this.remove();
-                }
 
                 if (style.display == "none"
                  || style.display == "contents") return this.style.display = "none";

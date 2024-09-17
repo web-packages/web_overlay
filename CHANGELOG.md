@@ -19,3 +19,6 @@
 # 1.0.10
 - Fixed an issue where the rendering status of an overlay target element was not accurately determined by checking only its own style.
 - Fixed an issue where an overlay would not remain in the DOM when the target element was not rendered but still present in the DOM.
+
+# 1.0.20
+- Fixed an issue by updating the check for DOM presence to reference only the target element.

@@ -97,20 +97,22 @@ export class OverlayElement extends HTMLElement {
     }
 
     performLayout() {
-        // When a target element is determined to be absent from the DOM or not rendered,
-        // an overlay element is no rendered or removed from the document main DOM.
         if (this.target instanceof HTMLElement) {
             let element = this.target;
 
+            // A target has been detached, so overlay will be detached in the dome together.
             if (!element.isConnected) {
                 this.remove();
             }
 
+            // When a target element is determined to be absent from the DOM or not rendered,
+            // an overlay element is no rendered or removed from the document main DOM.
             while (element) {
                 const style = getComputedStyle(element);
 
-                if (style.display == "none"
-                 || style.display == "contents") return this.style.display = "none";
+                if (style.display == "none") {
+                    return this.style.display = "none";
+                }
 
                 element = element.parentElement;
             }

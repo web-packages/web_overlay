@@ -1,6 +1,7 @@
 import { Overlay, OverlayAlignment, OverlayDirection } from "../dist/index.esm.js";
 
 const overlayTarget = document.getElementById("target");
+const overlayParent = document.getElementById("target-wrapper");
 const overlay = document.createElement("div");
 overlay.style.display = "flex";
 overlay.style.height = "100%";
@@ -20,7 +21,7 @@ overlay.append(child);
 const instance = Overlay.attach({
     element: overlay,
     target: overlayTarget,
-    parent: overlayTarget.parentElement,
+    parent: overlayParent,
     behavior: {
         viewportPadding: 15,
         targetGap: 10,

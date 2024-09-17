@@ -96,12 +96,18 @@ export class OverlayElement extends HTMLElement {
 
     performLayout() {
         if (this.target instanceof HTMLElement) {
-            const style = getComputedStyle(this.target);
+            let element = this.target;
 
-            // When the target element is determined to be absent from the DOM or not rendered,
-            // the overlay element is removed from the document main DOM.
-            if (style.display == "none"
-             || style.display == "contents") this.remove();
+            while (element) {
+                const style = getComputedStyle(element);
+
+                // When the target element is determined to be absent from the DOM or not rendered,
+                // the overlay element is removed from the document main DOM.
+                if (style.display == "none"
+                 || style.display == "contents") return this.remove();
+
+                element = element.parentElement;
+            }
         }
 
         const layout = this.behavior.direction;

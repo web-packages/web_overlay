@@ -56,7 +56,7 @@ export abstract class DrivenOverlayLayout extends OverlayLayout<DrivenOverlayCon
         const constraint = this.createOverlayConstraint(
             DOMRectUtil.applyPadding(viewport, viewportPadding)
         );
-        
+
         let modifiedRect = initialRect;
 
         if (modifier instanceof OverlayLayoutModifier) {

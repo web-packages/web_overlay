@@ -1,6 +1,6 @@
 {
   "name": "web-overlay-layout",
-  "version": "1.0.0",
+  "version": "1.0.10",
   "description": "This package provides the foundation to implement overlay elements that take overflow-considered.",
   "repository": "https://github.com/MTtankkeo/web_overlay",
   "bugs": "https://github.com/MTtankkeo/web_overlay/issues",
